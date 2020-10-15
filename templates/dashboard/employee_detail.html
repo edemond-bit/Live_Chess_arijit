@@ -1,0 +1,291 @@
+ {% extends '_layout.html' %} {% block title %} {{ title }} {% endblock %} {% load humanize %} {% block navheader %} {% include 'includes/navheader_employee_app.html' %} {% endblock %} {% block stylesheet %} {% endblock %}
+<!-- STYLESHEETS -->
+
+
+
+
+<!--CONTENTS-->
+{% block content %}
+<style>
+    .rounded-circle-image {
+        border-radius: 50% !important;
+        width: 250px;
+        height: 250px;
+    }
+    
+    .profile-wrapper {
+        padding-top: 10px;
+    }
+    
+    .list-group {
+        margin-top: 10px;
+    }
+    
+    .list-group-item {
+        position: relative;
+        display: block;
+        padding: 10px 15px;
+        margin-bottom: -1px;
+        background-color: #fff;
+        border: 1px solid transparent;
+        font-size: 17px;
+    }
+    
+    #override-start {
+        background: none !important;
+        top: 35% !important;
+        right: 13px;
+        color: #000;
+        font-size: 24px;
+    }
+    
+    .alert-warning {
+        background: #fd7b7b;
+    }
+    
+    .alert-success {
+        background-color: #82b72a;
+    }
+    
+    .alert-success,
+    .alert-warning {
+        font-size: 16px;
+    }
+    
+    .employee-name-title {
+        color: #3873b1;
+        font-weight: 600;
+        font-variant: petite-caps;
+        font-size: 3.1rem !important;
+    }
+    
+    span,
+    .list-group-item>div {
+        font-variant: petite-caps;
+    }
+    
+    .panel-default>.panel-heading {
+        color: #fff !important;
+        background-color: #2d88a9 !important;
+    }
+    
+    .panel-title a:hover {
+        color: #e6e4e4;
+    }
+    
+    .panel-title a:active {
+        color: #e6e4e4;
+    }
+    
+    .panel-title a:focus {
+        color: #e6e4e4;
+    }
+</style>
+<section class="content">
+    <section class="container-fluid">
+        <section class="row">
+            <section class="col col-lg-12">
+                <span><a href="{{request.META.HTTP_REFERER|escape}}" style="color:#565656;">Back</a></span>
+            </section>
+        </section>
+        <section class="row">
+            <section class="col col-lg-12 col-md-12  col-sm-12">
+                {% if messages %} {% for message in messages %}
+                <div {% if message.tags %} class="{{ message.tags}}" {% endif %}>
+                    {{ message }}
+                    <button type="button" class="close" id="override-start" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span>
+                                         </button>
+                </div>
+                {% endfor %} {% endif %}
+
+            </section>
+        </section>
+        <section class="row">
+            <section class="text-center">
+                <h3><span class="employee-name-title">{{ employee.get_full_name}}</span></h3>
+            </section>
+        </section>
+
+        <section class="row">
+            <section class="col col-lg-4 col-md-4 col-sm-12 profile-wrapper">
+                {% if user_detail.image %}
+                <img src="{{user_detail.image.url}}" class="img-fluid rounded-circle-image"> {% else %}
+                <img src="/media/default.png" class="img-fluid rounded-circle-image" /> {% endif %}
+                <section class="text-centered" style="margin-top: 3px;">
+
+
+                </section>
+            </section>
+            <!-- /profile-wrappper -->
+            <section class="col col-lg-8">
+                <!-- ACCORDIAN - COLLAPSIBLE -->
+                <!-- 1 Personal Detail -->
+                <!-- 2 -- Family -->
+                <!-- 3--  Emergency -->
+                <!-- 4 -- Bank Account -->
+                <div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true">
+
+                    <!-- PERSONAL INFORMATION -->
+                    <div class="panel panel-default">
+                        <div class="panel-heading" role="tab" id="headingOne">
+                            <h4 class="panel-title">
+                                <a role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+                    PERSONAL INFORMATIONS 
+                  </a>
+                            </h4>
+                        </div>
+                        <div id="collapseOne" class="panel-collapse collapse in" role="tabpanel" aria-labelledby="headingOne">
+                            <div class="panel-body">
+                                <div class="container-fluid">
+                                    <div class="row">
+                                        <div class="col col-lg-12">
+                                            <!-- <ul class="list-group">
+                                                <li class="list-group-item"><span>Fullname</span>
+                                                    <span>{{ employee.get_full_name }}</span>
+                                                </li>
+                                                <li class="list-group-item"><span>Nationality</span>
+                                                    <div> {{ employee.nationality}}</div>
+                                                </li>
+                                                {% if employee.email %}
+                                                <li class="list-group-item"><span>Email</span>
+                                                    <div>{{ employee.email}}</div>
+                                                </li>
+                                                {% endif %}
+                                                <li class="list-group-item"><span>Membership</span>
+                                                    <div>{{ employee.department}}</div>
+                                                </li>
+                                                <li class="list-group-item"><span>User Type</span>
+                                                    <div>{{ employee.employeetype}}</div>
+                                                </li>
+                                                <li class="list-group-item"><span>Role</span>
+                                                    <div>{{ employee.role}}</div>
+                                                </li>
+                                                <li class="list-group-item"><span>Date of Birth</span>
+                                                    <div>{{ employee.birthday}}</div>
+                                                </li>
+                                                <li class="list-group-item"><span>Age </span>
+                                                    <div>{{ employee.get_age }}</div>
+                                                </li>
+
+
+                                                <div>
+                                                    <span style="font-style: italic;">updated - {{employee.updated|naturaltime}}</span>
+                                                </div>
+
+                                            </ul> -->
+
+
+                                            <div class="list-group" id="list-tab" role="tablist">
+                                                <a class="list-group-item list-group-item-action" id="list-home-list" data-toggle="list" href="" role="tab" aria-controls=""><span>Fullname</span> <span style="float:right;">{{ employee.get_full_name }}</span>
+                                </a>
+
+                                                <a class="list-group-item list-group-item-action" id="list-profile-list" data-toggle="list" href="" role="tab" aria-controls=""><span>Firstname</span> <span style="float:right;"> {{ request.user.first_name}} </span>
+                                </a>
+                                                <a class="list-group-item list-group-item-action" id="list-profile-list" data-toggle="list" href="" role="tab" aria-controls=""><span>Lastname</span> <span style="float:right;"> {{ request.user.last_name }} </span>
+                                </a>
+
+                                                <a class="list-group-item list-group-item-action" id="list-messages-list" data-toggle="list" href="" role="tab" aria-controls=""><span>Age</span> <span style="float:right;">{{ user_detail.age}} </span>
+                                </a>
+
+                                                <a class="list-group-item list-group-item-action" id="list-settings-list" data-toggle="list" href="" role="tab" aria-controls=""><span>Gender</span> <span style="float:right;"> {{ employee.sex }}
+                                                </span>
+                                </a>
+
+                                                <!-- recent added 29/03/19 -->
+
+                                                <a class="list-group-item list-group-item-action" id="list-settings-list" data-toggle="list" href="" role="tab" aria-controls=""><span>Email </span><span style="float:right;">{{request.user.email }} </span>
+                                </a>
+
+
+
+
+
+                                                <a class="list-group-item list-group-item-action" id="list-settings-list" data-toggle="list" href="" role="tab" aria-controls=""><span>Contact</span> <span style="float:right;"> {{ employee.tel  }}</span></a>
+
+
+
+                                                <a class="list-group-item list-group-item-action" id="list-settings-list" data-toggle="list" href="" role="tab" aria-controls=""><span>Bio</span> <span style="float:right;">{{ user_detail.bio }} </span></a>
+
+
+
+
+                                                <a class="list-group-item list-group-item-action" id="list-settings-list" data-toggle="list" href="" role="tab" aria-controls=""><span>Date of Birth</span><span style="float:right;">{{ employee.birthday}}</span></a>
+
+
+
+                                                <a class="list-group-item list-group-item-action" id="list-settings-list" data-toggle="list" href="" role="tab" aria-controls=""><span>Membership</span> <span style="float:right;">{{ employee.tinnumber }}</span></a>
+
+
+
+                                                <a class="list-group-item list-group-item-action" id="list-settings-list" data-toggle="list" href="" role="tab" aria-controls=""><span>User Type</span> <span style="float:right;">{{ employee.employeeid }}</span></a>
+
+
+
+                                                <a class="list-group-item list-group-item-action" id="list-settings-list" data-toggle="list" href="" role="tab" aria-controls="">
+                                                        {% if employee.is_blocked %}
+                                                        <span>Status</span>
+                                                            <span style="float:right;">Inactive</span>
+                                                       
+                                                        {% else %}
+                                                       <span>Status</span>
+                                                            <span style="float:right;"> active</span>
+                                                       
+                                                        {% endif %}
+                                                   </a>
+
+
+
+                                                <div>
+                                                    <span><a href="{% url 'dashboard:usercreate'%}">Add your info</a></span>
+                                                </div>
+                                                <div>
+                                                    <!-- <span><a href="{% url 'dashboard:edit' employee.id %}">Edit</a></span> -->
+                                                </div>
+
+
+
+                                            </div>
+
+
+                                        </div>
+                                        <!-- Here working -->
+
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- /PERSONAL INFORMATION -->
+
+
+
+
+
+
+
+
+
+                </div>
+                <!-- /ACCORDION PARENT -->
+
+
+
+            </section>
+        </section>
+        <!-- /Row -->
+
+    </section>
+    <!-- /container -->
+
+
+</section>
+<!-- /content -->
+{% endblock %}
+
+<script type="text/javascript">
+    { % block extrajs %
+    }
+
+    { % endblock %
+    }
+</script>

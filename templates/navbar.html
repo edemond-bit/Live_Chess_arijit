@@ -1,0 +1,339 @@
+<!-- <nav class="navbar-primary">
+    <div class="sidebar-header" label="">
+        <div class="ak">
+            <a href="#" class="btn-expand-collapse" style="padding:0%;">
+                <img src="/static/img/logo.png" style="width:100%; " /></a>
+            <center>
+                <h4 style="margin-top: -24%; color:#ecc023;padding-bottom: 25%;"><span class="nav-label">Chess.Live</span></h4>
+            </center>
+        </div>
+        <ul class="navbar-primary-menu">
+
+
+            <li>
+                {% if user.is_authenticated %}
+                <a href="#"><i class="fa fa-user" aria-hidden="true"style='font-size:24px'></i> <span class="nav-label"> {{ request.user }}</span></a>{% endif %}
+
+                <a href="#"><i class='fas fa-book-reader' style='font-size:26px'></i> </span><span class="nav-label"> Event</span></a>
+                <a href=""><i class='fas fa-network-wired' style='font-size:20px'></i> <span class="nav-label"> Broadcast</span></a>
+                <a href=""><i class='fab fa-android' style='font-size:24px'></i> <span class="nav-label"> Android App</span></a>
+                <a href="#"><i class='fab fa-apple' style='font-size:24px'></i></span><span class="nav-label"> IOS App</span></a>
+            </li>
+
+            {% if not user.is_authenticated %}
+            <li class="nav-item">
+                <a class="nav-link" href="">Sign Up</a>
+            </li>
+            {% endif %} {% if user.is_authenticated %}
+            <li>
+                <a class="nav-link" href=""><i class="fa fa-sign-out" style="font-size:24px"></i><span class="nav-label">Logout</span></a>
+            </li>
+            {% else %}
+            <li class="nav-item active">
+                <a class="nav-link" href="">Login</a>
+            </li>
+            {% endif %}
+
+
+        </ul>
+</nav> -->
+
+<div id="wrapper" class="navbar-primary">
+
+    <aside id="sidebar-wrapper">
+        <div class="sidebar-brand sidebar-header" id="sidebar-toggle">
+            <div class="ak">
+                <a href="#" class="btn-expand-collapse" style="padding:0%;">
+                    <img src="/static/img/logo.png" style="width:80%; " /></a>
+                <center>
+                    <h4 style="margin-top: -24%; color:#ecc023;"><span class="nav-label">Chess.Live</span></h4>
+                </center>
+            </div>
+
+        </div>
+        <ul class=" navbar-primary-menu">
+            <li>
+                {% if user.is_authenticated %}
+                <a href="{% url 'dashboard:dashboard1' %}" style='color: #ecc023;'><i class="fa fa-user" aria-hidden="true"style='font-size:24px;color: #ecc023;'></i> <span class="nav-label"> Dashboard</span></a>{% endif %}
+
+                <a href="/" style='color: #ecc023;'><i class='fas fa-book-reader' style='font-size:26px;color: #ecc023;'></i> </span><span class="nav-label"> Home</span></a>
+                <a href="{% url 'dashboard:staffleavetable' %}" style='color: #ecc023;'><i class='fas fa-network-wired' style='font-size:20px;color: #ecc023;'></i> <span class="nav-label"> Tournment</span></a>
+                <a href="{% url 'accounts:userprofile' %}" style='color: #ecc023;'><i class='fab fa-android' style='font-size:24px;color: #ecc023;'></i> <span class="nav-label"> Profile</span></a>
+                <a href="{% url 'accounts:changepassword' %}" style='color: #ecc023;'><i class='fab fa-apple' style='font-size:24px;color: #ecc023;'></i></span><span class="nav-label"> Change Password</span></a>
+            </li>
+
+            {% if not user.is_authenticated %}
+            <li class="nav-item">
+                <a class="nav-link" style='color: #ecc023;' href="{% url 'accounts:register' %}"><i class="fa fa-vcard-o" style="font-size:24px"></i><span class="nav-label"> Sign Up</span></a>
+            </li>
+            {% endif %} {% if user.is_authenticated %}
+            <li>
+                <a class="nav-link" style='color: #ecc023;' href="{% url 'accounts:logout'  %}"><i class="fa fa-sign-out" style="font-size:24px"></i><span class="nav-label"> Logout</span></a>
+            </li>
+            {% else %}
+            <li class="nav-item active">
+                <a class="nav-link" style='color: #ecc023;' href="{% url 'accounts:login'  %}"><i class="fa fa-sign-in" style="font-size:24px"></i><span class="nav-label"> Login</span></a>
+            </li>
+            {% endif %}
+        </ul>
+    </aside>
+
+    <div id="navbar-wrapper">
+        <nav class="navbar navbar-inverse">
+            <div class="container-fluid">
+                <div class="navbar-header">
+                    <a href="#" style='color: #ecc023;' class="navbar-brand" id="sidebar-toggle"><i class="fa fa-bars" style='color: #ecc023;'></i></a>
+                </div>
+            </div>
+        </nav>
+    </div>
+
+    <!-- <section id="content-wrapper">
+        <div class="row">
+            <div class="col-lg-12">
+                <h2 class="content-title">Test</h2>
+                <p>Lorem ipsum...</p>
+            </div>
+        </div>
+    </section> -->
+
+</div>
+<style>
+    a:hover,
+    a:focus {
+        text-decoration: none;
+    }
+    
+    #wrapper {
+        padding-left: 0;
+        transition: all 0.5s ease;
+        position: relative;
+    }
+    
+    #sidebar-wrapper {
+        z-index: 1000;
+        position: fixed;
+        left: 250px;
+        width: 0;
+        height: 100%;
+        margin-left: -250px;
+        overflow-y: auto;
+        overflow-x: hidden;
+        background: #222;
+        transition: all 0.5s ease;
+    }
+    
+    #wrapper.toggled #sidebar-wrapper {
+        width: 250px;
+    }
+    
+    .sidebar-brand {
+        /* position: absolute; */
+        top: 0;
+        /* width: 250px; */
+        /* height: 67%; */
+        text-align: center;
+        padding: 20px 0;
+    }
+    
+    .sidebar-brand h2 {
+        margin: 0;
+        font-weight: 600;
+        font-size: 24px;
+        color: #fff;
+    }
+    
+    .sidebar-nav {
+        position: absolute;
+        top: 75px;
+        width: 250px;
+        margin: 0;
+        padding: 0;
+        list-style: none;
+    }
+    
+    .sidebar-nav>li {
+        text-indent: 10px;
+        line-height: 42px;
+    }
+    
+    .sidebar-nav>li a {
+        display: block;
+        text-decoration: none;
+        color: #757575;
+        font-weight: 600;
+        font-size: 18px;
+    }
+    
+    .sidebar-nav>li>a:hover,
+    .sidebar-nav>li.active>a {
+        text-decoration: none;
+        color: #fff;
+        background: #F8BE12;
+    }
+    
+    .sidebar-nav>li>a i.fa {
+        font-size: 24px;
+        width: 60px;
+    }
+    
+    #navbar-wrapper {
+        display: none;
+        width: 100%;
+        position: absolute;
+        z-index: 2;
+    }
+    
+    #wrapper.toggled #navbar-wrapper {
+        position: absolute;
+        margin-right: -250px;
+    }
+    
+    #navbar-wrapper .navbar {
+        border-width: 0 0 0 0;
+        background-color: #eee;
+        font-size: 24px;
+        margin-bottom: 0;
+        border-radius: 0;
+    }
+    
+    #navbar-wrapper .navbar a {
+        color: #757575;
+    }
+    
+    #navbar-wrapper .navbar a:hover {
+        color: #F8BE12;
+    }
+    
+    #content-wrapper {
+        width: 100%;
+        position: absolute;
+        padding: 7px;
+        top: 100px;
+    }
+    
+    #wrapper.toggled #content-wrapper {
+        position: absolute;
+        margin-right: -250px;
+    }
+    
+    @media (min-width: 992px) {
+        #wrapper.toggled {
+            padding-left: 60px;
+        }
+        #sidebar-wrapper {
+            width: 190px;
+        }
+        #wrapper.toggled #sidebar-wrapper {
+            width: 60px;
+        }
+        #wrapper.toggled #navbar-wrapper {
+            position: absolute;
+            margin-right: -190px;
+        }
+        #wrapper.toggled #content-wrapper {
+            position: absolute;
+            margin-right: -190px;
+        }
+        #navbar-wrapper {
+            position: relative;
+        }
+        #wrapper.toggled {
+            padding-left: 60px;
+        }
+        #content-wrapper {
+            position: relative;
+            top: 0;
+        }
+        #wrapper.toggled #navbar-wrapper,
+        #wrapper.toggled #content-wrapper {
+            position: relative;
+            margin-right: 60px;
+        }
+        #navbar-wrapper {
+            display: none;
+            width: 100%;
+            position: absolute;
+            z-index: 2;
+        }
+    }
+    
+    @media (min-width: 768px) and (max-width: 991px) {
+        #navbar-wrapper {
+            display: none;
+            width: 100%;
+            position: absolute;
+            z-index: 2;
+        }
+        #sidebar-wrapper {
+            width: 60px;
+        }
+        #wrapper.toggled #navbar-wrapper {
+            position: absolute;
+            margin-right: -250px;
+        }
+        #wrapper.toggled #content-wrapper {
+            position: absolute;
+            margin-right: -250px;
+        }
+        #navbar-wrapper {
+            position: relative;
+        }
+        #wrapper.toggled {
+            padding-left: 250px;
+        }
+        #content-wrapper {
+            position: relative;
+            top: 0;
+        }
+        #wrapper.toggled #navbar-wrapper,
+        #wrapper.toggled #content-wrapper {
+            position: relative;
+            margin-right: 250px;
+        }
+    }
+    
+    @media (max-width: 767px) {
+        #navbar-wrapper {
+            display: block;
+            width: 100%;
+            position: absolute;
+            z-index: 2;
+        }
+        #sidebar-wrapper {
+            width: 0;
+        }
+        #wrapper.toggled #sidebar-wrapper {
+            width: 250px;
+        }
+        #wrapper.toggled #navbar-wrapper {
+            position: absolute;
+            margin-right: -250px;
+        }
+        #wrapper.toggled #content-wrapper {
+            position: absolute;
+            margin-right: -250px;
+        }
+        #navbar-wrapper {
+            position: relative;
+        }
+        #wrapper.toggled {
+            padding-left: 250px;
+        }
+        #content-wrapper {
+            position: relative;
+            top: 0;
+        }
+        #wrapper.toggled #navbar-wrapper,
+        #wrapper.toggled #content-wrapper {
+            position: relative;
+            margin-right: 250px;
+        }
+    }
+</style>
+<script>
+    $("#sidebar-toggle").click(function(e) {
+        e.preventDefault();
+        $("#wrapper").toggleClass("toggled");
+    });
+</script>

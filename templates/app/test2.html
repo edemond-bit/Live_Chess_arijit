@@ -1,0 +1,291 @@
+{% extends "_layout.html" %} {% load static %} {% block title %} Dashboard {% endblock %} {% block content %}
+<style>
+    .chessboard img {
+        padding: 0px;
+        background: transparent;
+        border: 0px;
+    }
+    
+    .boss {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: space-around;
+        width: 100%;
+        height: 100%;
+    }
+    
+    .servent {
+        width: 30%;
+        height: fit-content;
+        min-height: 64vh;
+    }
+    
+    .chessboard {
+        margin: 0 auto;
+    }
+    
+    @media (min-width: 1260px)and (max-width: 1800px) {
+        .servent {
+            width: 30%;
+            height: fit-content;
+            min-height: 64vh;
+        }
+        .chessboard {
+            margin: 0 auto;
+        }
+    }
+    
+    @media (min-width: 830px)and (max-width: 1260px) {
+        .servent {
+            width: 38%;
+            height: fit-content;
+            min-height: 64vh;
+        }
+        .chessboard {
+            margin: 0 auto;
+        }
+    }
+    
+    @media (min-width: 765px)and (max-width: 830px) {
+        .servent {
+            width: 43%;
+            height: fit-content;
+            min-height: 64vh;
+        }
+        .chessboard {
+            margin: 0 auto;
+        }
+    }
+    
+    @media (min-width: 755px)and (max-width: 765px) {
+        .servent {
+            width: 45%;
+            height: fit-content;
+            min-height: 64vh;
+        }
+        .chessboard {
+            margin: 0 auto;
+        }
+    }
+    
+    @media (min-width: 735px)and (max-width: 755px) {
+        .servent {
+            width: 48%;
+            height: fit-content;
+            min-height: 64vh;
+        }
+        .chessboard {
+            margin: 0 auto;
+        }
+    }
+    
+    @media (min-width: 600px)and (max-width: 735px) {
+        .servent {
+            width: 55%;
+            height: fit-content;
+            min-height: 64vh;
+        }
+        .chessboard {
+            margin: 0 auto;
+        }
+    }
+    
+    @media (min-width: 500px)and (max-width: 600px) {
+        .servent {
+            width: 60%;
+            height: fit-content;
+            min-height: 64vh;
+        }
+        .chessboard {
+            margin: 0 auto;
+        }
+    }
+    
+    @media (min-width: 470px)and (max-width: 500px) {
+        .servent {
+            width: 65%;
+            height: fit-content;
+            min-height: 64vh;
+        }
+        .chessboard {
+            margin: 0 auto;
+        }
+    }
+    
+    @media (min-width: 400px)and (max-width: 470px) {
+        .servent {
+            width: 78%;
+            height: fit-content;
+            min-height: 64vh;
+        }
+        .chessboard {
+            margin: 0 auto;
+        }
+    }
+    
+    @media (min-width: 370px)and (max-width: 400px) {
+        .servent {
+            width: 91%;
+            height: fit-content;
+            min-height: 64vh;
+        }
+        .chessboard {
+            margin: 0 auto;
+        }
+    }
+    
+    @media (min-width: 360px)and (max-width: 370px) {
+        .servent {
+            width: 95%;
+            height: fit-content;
+            min-height: 64vh;
+        }
+        .chessboard {
+            margin: 0 auto;
+        }
+    }
+    
+    @media (min-width: 336px)and (max-width: 360px) {
+        .servent {
+            width: 95%;
+            height: fit-content;
+            min-height: 64vh;
+        }
+        .chessboard {
+            margin: 0 31px;
+        }
+    }
+    
+    @media (min-width: 300px)and (max-width: 336px) {
+        .servent {
+            width: 95%;
+            height: fit-content;
+            min-height: 64vh;
+        }
+        .chessboard {
+            margin: 0 20px;
+        }
+    }
+    
+    @media (min-width: 200px)and (max-width: 300px) {
+        .servent {
+            width: 95%;
+            height: fit-content;
+            min-height: 64vh;
+        }
+        .chessboard {
+            margin: 0 10px;
+        }
+    }
+</style>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/chess.js/0.10.2/chess.js"></script>
+<center>
+
+
+    <h1>{{heats.tournment}}</h1>
+
+
+</center>
+<div class="boss">
+    {% for h in heats %}
+
+    <div class="servent">
+        <center>
+            <h5> {{h.player1}} <a>01:39:43</a></h5>
+        </center>
+        <a href="{% url 'dashboard:dashboard11' h.id %}" style='color: black;'>
+            <div class="chessboard" id="board{{ forloop.counter }}" style=" width: 70%;">
+            </div>
+        </a>
+        <center>
+            <h5> {{h.player2}} <a>00:41:41</a></h5>
+        </center>
+
+
+    </div>
+    {% endfor%}
+</div>
+{% for h in heats %}
+
+<script type="text/javascript">
+    $(function() {
+        var config = {
+            draggable: false,
+            position: 'r1bqkbnr/pppp1ppp/2n5/1B2p3/4P3/5N2/PPPP1PPP/RNBQK2R',
+
+
+
+        }
+        var config1 = {
+            draggable: false,
+            position: 'r1k4r/p2nb1p1/2b4p/1p1n1p2/2PP4/3Q1NB1/1P3PPP/R5K1',
+
+
+
+        }
+        var board = ChessBoard('board1', config);
+        var board1 = ChessBoard('board2', config1);
+        var board2 = ChessBoard('board3', config);
+        var board4 = ChessBoard('board4', config1);
+        var board2 = ChessBoard('board3', config);
+        var board4 = ChessBoard('board4', config1);
+        var board5 = ChessBoard('board5', config);
+        var board6 = ChessBoard('board6', config1);
+        var board7 = ChessBoard('board7', config);
+        var board8 = ChessBoard('board8', config1);
+        var board9 = ChessBoard('board9', config);
+        var board10 = ChessBoard('board10', config1);
+        var board11 = ChessBoard('board11', config);
+        var board12 = ChessBoard('board12', config1);
+        var board13 = ChessBoard('board13', config);
+        var board14 = ChessBoard('board14', config1);
+        var board15 = ChessBoard('board15', config);
+        var board16 = ChessBoard('board16', config1);
+        var board17 = ChessBoard('board17', config);
+        var board18 = ChessBoard('board18', config1);
+        var board19 = ChessBoard('board19', config);
+        var board20 = ChessBoard('board20', config1);
+        var board21 = ChessBoard('board21', config);
+        var board22 = ChessBoard('board22', config1);
+        var board23 = ChessBoard('board23', config);
+        var board24 = ChessBoard('board24', config1);
+        var board25 = ChessBoard('board25', config);
+        var board26 = ChessBoard('board26', config1);
+        var board27 = ChessBoard('board27', config);
+        var board28 = ChessBoard('board28', config1);
+        var board29 = ChessBoard('board29', config);
+        var board30 = ChessBoard('board30', config1);
+        var board31 = ChessBoard('board31', config);
+        var board32 = ChessBoard('board32', config1);
+        var board33 = ChessBoard('board33', config);
+        var board34 = ChessBoard('board34', config1);
+        var board35 = ChessBoard('board35', config);
+        var board36 = ChessBoard('board36', config1);
+        var board37 = ChessBoard('board37', config);
+        var board38 = ChessBoard('board38', config1);
+        var board39 = ChessBoard('board39', config);
+        var board40 = ChessBoard('board40', config1);
+        var board41 = ChessBoard('board41', config);
+        var board42 = ChessBoard('board42', config1);
+        var board43 = ChessBoard('board43', config);
+        var board44 = ChessBoard('board44', config1);
+        var board45 = ChessBoard('board45', config);
+        var board46 = ChessBoard('board46', config1);
+        var board47 = ChessBoard('board47', config);
+        var board48 = ChessBoard('board48', config1);
+
+        var game = new Chess();
+
+        var board = null
+        var board1 = null
+        var board2 = null
+        var board3 = null
+        var board4 = null
+        var board5 = null
+        var game = new Chess()
+
+
+
+    });
+</script>
+{% endfor%} {% endblock content %}

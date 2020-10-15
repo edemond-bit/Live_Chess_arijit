@@ -1,0 +1,91 @@
+{% extends "base.html" %} {% load static %} {% block title %} Dashboard {% endblock %} {% block content %}
+<form method="POST" class="form3" action="">
+    {% csrf_token %}
+    <div class="form-group">
+        <label class="form-label" for="form3-name">Event name</label>
+        <input id="form3-name" name="name" class="form-control" minlength="3" maxlength="80" autofocus="autofocus" />
+    </div>
+    <div class="form-group">
+        <label class="form-label" for="form3-description">Short event description</label>
+        <textarea id="form3-description" name="description" class="form-control" minlength="3" maxlength="400" rows="2"></textarea>
+    </div>
+
+    <div class="form-actions">
+        <a href="/broadcast">Cancel</a>
+        <!-- <button type="submit" data-icon="E" id="submit" class="submit button text">Submit</button> -->
+        <input id="" type="submit" />
+        <a href="javascript:;" id="submit">Submit</a>
+        <a href="javascript:;" id="save">Save</a>
+
+    </div>
+</form>
+
+
+<a id="reconnecting" class="link text" data-icon="B">Reconnecting</a>
+
+<script>
+    $("#save").click(function(e) {
+
+        e.preventDefault();
+        $.ajax({
+            url: "https://lichess.org/api/account",
+            type: 'GET',
+
+
+            headers: {
+                'Authorization': 'Bearer ' + 'RboOwEdRt7C5fEhX'
+            },
+
+
+            success: function(data) {
+                console.log(data);
+                alert('you are logged in');
+                //save(e);
+
+            }
+        })
+    });
+</script>
+<script>
+    $("#submit").click(function(e) {
+        var name = $('#form3-name').val();
+        var desc = $('#form3-description').val();
+        e.preventDefault();
+        $.ajax({
+            url: "https://lichess.org/broadcast/new",
+            type: 'POST',
+            dataType: 'jsonp',
+
+            data: JSON.stringify({
+                name: 'name',
+                description: 'desc'
+            }),
+            contentType: "application/json",
+
+
+            headers: {
+                'Authorization': 'Bearer ' + 'RboOwEdRt7C5fEhX',
+                'Accept': 'application/json',
+                'Content-Type': 'application/json',
+                'Access-Control-Allow-Headers': '*',
+                'Access-Control-Allow-Origin': '*'
+
+            },
+
+
+            success: function(response) {
+                alert(response.status);
+            },
+        })
+
+    });
+</script>
+
+
+
+
+
+
+
+
+{% endblock content %}

@@ -1,0 +1,231 @@
+{% extends '_layout.html' %}{% load static %} {% load crispy_forms_tags %} {% block title %} {{ title }} {% endblock %} {% load crispy_forms_tags %} {% block navheader %} {% include 'includes/navheader_employee_app.html' %} {% endblock %} 
+{% block content %}
+
+
+<style type="text/css">
+    html,
+    body {
+        overflow: hidden;
+        height: 100%;
+    }
+    
+    .shadow {
+        -webkit-box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.14), 0 3px 1px -2px rgba(0, 0, 0, 0.12), 0 1px 5px 0 rgba(0, 0, 0, 0.2);
+        box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.14), 0 3px 1px -2px rgba(0, 0, 0, 0.12), 0 1px 5px 0 rgba(0, 0, 0, 0.2);
+    }
+    
+    .wrapper-form-index-page {
+        padding: 4%;
+    }
+    /* ------ center form -------*/
+    
+    .parent-wrap {
+        display: table;
+        width: 100%;
+        height: 100%;
+        /*background-color: #f7f7f7;*/
+    }
+    
+    .sub-parent-wrap {
+        display: table-cell;
+        vertical-align: middle;
+        padding: 15px;
+    }
+    /* ----- center form ---------*/
+    
+    .btn-custom {
+        padding: 4px 16px !important;
+        background: transparent !important;
+        color: #505050 !important;
+        border: 2px solid #8282e6 !important;
+        transition: all 400ms ease;
+    }
+    
+    .btn-custom:hover {
+        color: #565656 !important;
+    }
+    
+    .forgt-pass-wrp {
+        margin-top: 5px;
+    }
+    
+    .forgt-pass-wrp a {
+        text-decoration: none;
+    }
+    
+    label {
+        font-weight: 100;
+        font-size: 16px;
+    }
+    
+    h3 {
+        font-weight: 100 !important;
+        font-size: 25px;
+    }
+    
+    .navbar {
+        margin-bottom: 0 !important;
+    }
+    
+    a {
+        font-variant: petite-caps;
+        font-weight: 100;
+        font-size: 16px;
+    }
+    
+    #override-start {
+        background: none !important;
+        top: 35% !important;
+        right: 13px;
+        color: #000;
+        font-size: 24px;
+    }
+    
+    .alert-error {
+        background: #fd7b7b;
+        text-align: center;
+        font-size: 17px;
+    }
+    
+    .alert-success,
+    .alert-warning {
+        font-size: 16px;
+    }
+    
+    a {
+        font-variant: petite-caps;
+        font-weight: 100;
+        font-size: 16px;
+    }
+    
+    .navbar-brand {
+        font-variant: petite-caps;
+        font-family: 'Luckiest Guy', cursive;
+        font-weight: 600;
+        font-size: 3.1rem;
+        color: #e4a530;
+        text-shadow: 1px 2px 1px rgba(0, 0, 0, 0.2);
+    }
+    
+    h2 {
+        font-family: 'Alice', serif;
+        color: gold;
+        font-size: 4.9rem;
+    }
+    
+    body {
+        position: relative;
+        /*background: #243177;*/
+    }
+    
+    a {
+        font-variant: petite-caps;
+        font-weight: 100;
+        font-size: 16px;
+    }
+    
+    .navbar-brand {
+        font-variant: petite-caps;
+        font-family: 'Luckiest Guy', cursive;
+        font-weight: 600;
+        font-size: 3.1rem;
+        color: #e4a530;
+        text-shadow: 1px 2px 1px rgba(0, 0, 0, 0.2);
+    }
+    
+    h2 {
+        font-family: 'Alice', serif;
+        color: gold;
+        font-size: 4.9rem;
+    }
+    
+    p {
+        font-variant: small-caps;
+        color: #cecece;
+    }
+    
+    p span {
+        color: #a5a5a5;
+        font-weight: bold;
+    }
+    
+    span.icon {
+        font-size: 15px;
+    }
+    
+    .content {
+        position: relative;
+        height: 100vh;
+    }
+    
+    .sub-title {
+        vertical-align: -webkit-baseline-middle;
+        font-size: 12px !important;
+        font-family: 'Luckiest Guy', cursive;
+    }
+    
+    .back-link {
+        color: #fff;
+        font-size: 2.6rem;
+        font-weight: 900;
+        transition: all 400ms ease-in-out;
+    }
+    
+    .back-link:hover {
+        color: #fff;
+        font-size: 2.8rem;
+        transition: all 400ms ease-in-out;
+    }
+    
+    .container-centered-items {
+        position: absolute;
+        top: 50%;
+        left: 0;
+        right: 0;
+    }
+</style>
+
+
+<section class="parent-wrap">
+
+    <section class="sub-parent-wrap">
+
+        <section class="container">
+            <section class="row">
+                <section class="col col-sm-12">
+                    {% if messages %} {% for message in messages %}
+                    <div {% if message.tags %} class="{{ message.tags}}" {% endif %}>
+                        {{ message }}
+                        <button type="button" class="close" id="override-start" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span>
+                                         </button>
+                    </div>
+                    {% endfor %} {% endif %}
+                </section>
+            </section>
+
+            <section class="row">
+
+                <div class="col-lg-6 col-lg-offset-3">
+                    <div class="wrapper-form-index-page shadow">
+                        <div class="row text-center">
+                            <h3 class="title-h3">User Login</h3>
+                        </div>
+
+                        <form action="" method="POST" id="login_form">
+                            {% csrf_token %} {{ form | crispy}}
+                            <button type="submit" class="btn btn-primary btn-lg btn-block btn-custom">Login</button>
+                            <div class="forgt-pass-wrp">
+                                 <a href="{% url 'password_reset' %}">Forgotten your password ?</a> 
+                            </div>
+                        </form>
+
+                    </div>
+                </div>
+
+            </section>
+        </section>
+        <!-- container-->
+    </section>
+</section>
+
+{% endblock %}

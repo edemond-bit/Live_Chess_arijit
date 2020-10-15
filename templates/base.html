@@ -1,0 +1,279 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+    <title>Chess.Live | {% block title %}{% endblock %}</title>
+    <!-- Font Awesome -->
+
+
+    <link rel="shortcut icon" type="image/png" href="{% static 'img/logo3.png' %}" />
+
+    <!-- Your custom styles (optional) -->
+    <link href="{% static 'css/style.css' %}" rel="stylesheet">
+
+    <!-- Bootstrap CSS CDN -->
+    <link href="{% static 'css/bootstrap.min.css' %}" rel="stylesheet">
+    <!-- Scrollbar Custom CSS -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/malihu-custom-scrollbar-plugin/3.1.5/jquery.mCustomScrollbar.min.css">
+
+    <!-- Font Awesome JS -->
+    <link rel='stylesheet' href='https://use.fontawesome.com/releases/v5.7.0/css/all.css' integrity='sha384-lZN37f5QGtY3VHgisS14W3ExzMWZxybE1SJSEsQp9S+oqd12jhcu+A56Ebc1zFSJ' crossorigin='anonymous'>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+
+    <link href="{% static 'css/style.css' %}" rel="stylesheet">
+
+
+    <script src="{% static 'js/svg.min.js' %}"></script>
+    <script src="{% static 'js/svg.chessboard.min.js' %}"></script>
+    <script type="text/javascript" src="https://ntstatic2.chesstempo.com/js/main-all.vers1513.js"></script>
+    <link rel="stylesheet" type="text/css" href="https://ntstatic1.chesstempo.com/js/external/yui/build/assets/skins/sam/yui-skins.vers1513.css" />
+
+    <script type="text/javascript" src="https://ntstatic2.chesstempo.com/js/pgnpage-all.vers1513.js"></script>
+    <link type="text/css" rel="stylesheet" href="https://ntstatic1.chesstempo.com/css/board-min.vers1513.css" />
+
+    <script type="text/javascript" src="{% static 'js/chessboardArrow.js' %}"></script>
+
+    <script src="{% static 'js/svg.draggable.min.js' %}"></script>
+
+
+
+    <link type="text/css" rel="stylesheet" href="{% static 'css/site.css' %}">
+    <link type="text/css" rel="stylesheet" href="{% static 'css/chessboard.css' %}">
+    <link type="text/css" rel="stylesheet" href="{% static 'css/play.css' %}">
+    <link type="text/css" rel="stylesheet" href="{% static 'css/sweetalert.css' %}">
+    <script type="text/javascript" src="{% static 'js/sweetalert.min.js' %}"></script>
+
+    <script type="text/javascript" src="{% static 'js/jquery-2.1.3.min.js' %}"></script>
+
+    <script type="text/javascript" src="{% static 'js/three.js' %}"></script>
+    <script type="text/javascript" src="{% static 'js/chessboard3.js' %}"></script>
+
+
+
+    <!-- game state, move validation, PGN, etc -->
+    <script src="{% static 'js/chess.js' %}"></script>
+    <script src="{% static 'js/chessboardjs-themes.js' %}"></script>
+    <script src="{% static 'js/lozza.js' %}"></script>
+    <!--  // <script src="{% static 'js/stockfish.js' %}"></script> -->
+    <script src="{% static 'js/p4wn.js' %}"></script>
+
+    <script type="text/javascript" src="{% static 'js/raphael-min.js' %}"></script>
+    <script type="text/javascript" src="{% static 'js/jquery.sonic-gauge.js' %}"></script>
+
+    <link href="{% static 'css/bootstrap.min.css' %}" rel="stylesheet" />
+
+    <!-- Animation library for notifications   -->
+    <link href="{% static 'css/animate.min.css' %}" rel="stylesheet" />
+
+    <!--  Light Bootstrap Table core CSS    -->
+    <link href="{% static 'css/light-bootstrap-dashboard.css' %}" rel="stylesheet" />
+
+
+    <!--  CSS for Demo Purpose, don't include it in your project     -->
+    <link href="{% static 'css/demo.css' %}" rel="stylesheet" />
+
+</head>
+
+<body id="body">
+    <style>
+
+    </style>
+    <div class="wrapper">
+
+        {% include "navbar.html" %}
+
+
+        <!-- Start your project here-->
+        <section id="content-wrapper">
+            <div class="main-content" style=" ">
+                <!--  <div style="height: 100vh" class="container"> -->
+
+                {% block content %}
+
+                <div class="big">
+
+
+
+                    {% for leave in leave_list %}
+                    <div class="one"><a href="{% url 'dashboard:test2' leave.id %}" style='color: black;'><i class='fas fa-chess-king' style='font-size:24px;'></i> <span>{{leave.name}}</span><br><span style="width: fit-content;">{{leave.desc}}</span></a></div>
+
+                    {% endfor %} {% endblock %}
+                    <!--  </div> -->
+                </div>
+        </section>
+        </div>
+
+        <!-- /Start your project here-->
+    </div>
+    <!-- jQuery CDN - Slim version (=without AJAX) -->
+    <!-- <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script> -->
+    <!-- Popper.JS -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.0/umd/popper.min.js" integrity="sha384-cs/chFZiN24E4KMATLdqdvsezGxaGsi4hLGOzlXwp5UZB1LY//20VyM2taTB4QvJ" crossorigin="anonymous"></script>
+    <!-- Bootstrap JS -->
+    <script type="text/javascript" src="{% static 'js/bootstrap.min.js' %}"></script>
+
+    <!-- jQuery Custom Scroller CDN -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/malihu-custom-scrollbar-plugin/3.1.5/jquery.mCustomScrollbar.concat.min.js"></script>
+
+    <script type="text/javascript">
+        $(document).ready(function() {
+            $("#sidebar").mCustomScrollbar({
+                theme: "minimal"
+            });
+
+            $('#sidebarCollapse').on('click', function() {
+                $('#sidebar, #content').toggleClass('active');
+                $('.collapse.in').toggleClass('in');
+                $('a[aria-expanded=true]').attr('aria-expanded', 'false');
+            });
+        });
+    </script>
+    <!-- <script>
+        $(document).ready(function() {
+
+            GoToAnchor = function() {
+                // find the anchor and any tab it might be in
+                selected_anchor_name = encodeURIComponent(window.location.hash.substring(1));
+                selected_anchor = $('a[name="' + selected_anchor_name + '"], a[id="' + selected_anchor_name + '"]');
+                parent_tab = selected_anchor.parents('.tab-panel');
+                // account for an anchor in a label
+                parent_label = selected_anchor.parents('.tab-label');
+                if (parent_label.length) {
+                    parent_tab = parent_label.next('.tab-panel');
+                }
+                // do the steps of this function only if we have an anchor link and a tab panel
+                if (selected_anchor.length && parent_tab.length) {
+                    parent_tab_label = parent_tab.prev('.tab-label');
+                    parent_tab_index = parent_tab_label.attr('data-tabindex');
+                    parent_tab.parent().find('ul.tabs li').eq(parent_tab_index).click();
+                    if (parent_tab.hasClass('collapsed')) {
+                        parent_tab.removeClass('collapsed');
+                        parent_tab_label.removeClass('collapsed');
+                    }
+                    // scroll to the anchor
+                    var s = selected_anchor.offset().top - 50; // console.log(s);
+                    $('html').animate({
+                        'scrollTop': s
+                    }, 500, 'swing');
+                }
+            };
+
+            // prepare HTML structure for each tab container
+            $('.tabs-container').each(function() {
+                if (!$(this).hasClass('tabs-processed')) {
+                    // find the headings that are tab labels
+                    my_tablabels = $(this).find('.tab-label');
+                    // create tabs
+                    if ($(this).find('ul.tabs').length === 0) {
+                        $(this).prepend('<ul class="tabs"></ul>');
+                        var x;
+                        for (x = 0; x < my_tablabels.length; x++) {
+                            $(this).find('ul.tabs').append('<li data-tabindex="' + x + '">' + my_tablabels.eq(x).text() + '</li>');
+                        }
+                    }
+                    // structure all labels and wrap all tab panels
+                    if ($(this).find('.tab-panel').length === 0) {
+                        my_tablabels.each(function(i) {
+                            $(this).attr('data-tabindex', i);
+                            $(this).wrapInner('<a id="' + encodeURIComponent($(this).text()) + '"></a>');
+                            kids = $(this).nextUntil('.tab-label').wrapAll('<div class="tab-panel"></div>');
+                            // default state class for when tabs are collapsable sections
+                            $(this).addClass('collapsed').next('.tab-panel').addClass('collapsed');
+                        });
+                    }
+                    // open initial tab
+                    $(this).find('ul.tabs li').eq(0).addClass('open');
+                    my_tablabels.eq(0).addClass('open').next('.tab-panel').addClass('open');
+                    // tab click events
+                    $('.tabs-container ul.tabs li').each(function(i) {
+                        $(this).click(function() {
+                            if (!$(this).hasClass('open')) {
+                                $('.tabs-container .open').removeClass('open');
+                                my_tabindex = $(this).attr('data-tabindex');
+                                $(this).addClass('open');
+                                $('.tabs-container .tab-label').eq(my_tabindex).addClass('open');
+                                $('.tabs-container .tab-panel').eq(my_tabindex).addClass('open');
+                            }
+                        });
+                    });
+                    // collapsable header click event
+                    $('.tabs-container .tab-label').click(function() {
+                        if (!$(this).hasClass('transition')) {
+                            kids = $(this).next('.tab-panel');
+                            kids.removeClass('collapsed');
+                            var fullHeight = kids.outerHeight();
+                            $(this).addClass('transition');
+                            kids.addClass('transition');
+
+                            if ($(this).hasClass('collapsed')) {
+                                kids.css({
+                                    'height': '0px',
+                                    'padding-bottom': '0px',
+                                    'padding-top': '0px'
+                                }).animate({
+                                    height: fullHeight + 'px',
+                                    paddingBottom: '32px',
+                                    paddingTop: '16px',
+                                }, 500, function() {
+                                    $('.tabs-container .transition').removeClass('collapsed').removeClass('transition').removeAttr('style');
+                                });
+                            } else {
+                                kids.css('height', fullHeight + 'px').animate({
+                                    height: '0px',
+                                    paddingBottom: '0px',
+                                    paddingTop: '0px',
+                                }, 500, function() {
+                                    $('.tabs-container .transition').addClass('collapsed').removeClass('transition').removeAttr('style');
+                                });
+                            }
+                        }
+                    });
+                    // indicate state of readiness
+                    $(this).addClass('tabs-processed');
+                }
+            });
+            // if there are tabs and someone has linked to an anchor inside a tab
+            //console.log(window.location.hash);
+            if (window.location.hash != '') {
+                GoToAnchor();
+            }
+            // handle case when page is already loaded
+            $(window).on('hashchange', function() {
+                GoToAnchor();
+            });
+        });
+    </script> -->
+    <script>
+        function toggleDarkLight() {
+            var body = document.getElementById("body");
+            var currentClass = body.className;
+            body.className = currentClass == "dark-mode" ? "light-mode" : "dark-mode";
+        }
+    </script>
+    <script>
+        $('.btn-expand-collapse').click(function(e) {
+            $('.navbar-primary').toggleClass('collapsed');
+        });
+    </script>
+    <script>
+        $('a[data-toggle="formtab"]').click(function() {
+            var targetId = $(this).attr('href');
+
+            $('.tabs-panels').removeClass('active')
+            $('a[data-toggle="formtab"]').removeClass('active');
+
+            $(targetId).addClass('active');
+            $('a[href="' + targetId + '"]').addClass('active')
+
+
+
+        });
+    </script>
+</body>
+
+</html>

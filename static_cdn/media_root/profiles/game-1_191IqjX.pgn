@@ -1,0 +1,14 @@
+[ePGN "0.1;DGT LiveChess/2.2.5"]
+[Event "new tournament description"]
+[Site "noida, India"]
+[Date "2020.03.13"]
+[Round "1.1"]
+[White "Player 1, akshat"]
+[Black "Player 2, sameer"]
+[Result "*"]
+[TimeControl "123122142352"]
+
+1. Na3 {[%emt 00:00:27]} b6 2. c4 {[%emt 00:00:09]} c5 3. Nh3 {[%emt 00:02:18]}
+f5 {[%emt 00:06:50]} 4. Nb5 {[%emt 00:00:11]} d5 {[%emt 00:00:05]} 5. cxd5
+{[%emt 00:00:05]} Qxd5 {[%emt 00:00:04]} *
+

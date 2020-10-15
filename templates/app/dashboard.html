@@ -1,0 +1,1987 @@
+{% extends "_layout.html" %} {% load static %} {% block title %} Dashboard {% endblock %} {% block content %}
+<style type="text/css">
+    /*.pen body {
+    padding-top:50px;
+}*/
+    
+    .ak1 {
+        width: 100%;
+        height: 100%;
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: space-around;
+        /* margin-top:-5%;*/
+    }
+    
+    .one1 {
+        width: 60%;
+        min-height: fit-content;
+        height: fit-content;
+        margin-left: -4%;
+    }
+    
+    .two2 {
+        width: 34%;
+        margin-left: -12%;
+        display: flex;
+        /* min-height: fit-content;
+background-color: black;
+border: 4px solid grey;
+border-radius: 6px;*/
+    }
+    
+    #meter {
+        /* margin: 0 auto 4.5em; */
+        width: 100%;
+        height: 50px;
+        display: block;
+        margin-left: 7%;
+    }
+    
+    @import url("https://fonts.googleapis.com/css?family=Nunito:400,900|Montserrat|Roboto");
+    /*body {
+background: linear-gradient(to right, #000000, #777777);
+}*/
+    
+    .containers {
+        background: #060606d6;
+        width: 364px;
+        flex-basis: 300px;
+        height: calc(100vh - 30px);
+        margin: 0 auto;
+        position: relative;
+        margin-top: 10%;
+        border-radius: 6px;
+        box-shadow: 2px 5px 20px 2px 5px 20px rgb(119, 119, 119);
+    }
+    
+    .CTA {
+        width: 80px;
+        height: 40px;
+        right: -20px;
+        bottom: 0;
+        margin-bottom: 90px;
+        position: absolute;
+        z-index: 1;
+        background: #777777;
+        font-size: 1em;
+        transform: rotate(-90deg);
+        transition: all .5s ease-in-out;
+        cursor: pointer;
+    }
+    
+    .CTA h1 {
+        color: #FFFFFF;
+        margin-top: 10px;
+        margin-left: 9px;
+    }
+    
+    .CTA:hover {
+        background: #000000;
+        transform: scale(1.1);
+    }
+    
+    .leftbox {
+        float: left;
+        top: 3%;
+        /* left: 2%; */
+        position: absolute;
+        width: 15%;
+        height: 94%;
+        background-image: url(/static/img/chesspieces/board/lapis/lapis1.png);
+        box-shadow: 3px 3px 10px rgba(119, 119, 119, 0.5);
+        display: none;
+    }
+    
+    nav a {
+        list-style: none;
+        padding: 27px;
+        color: #FFFFFF;
+        font-size: 1.1em;
+        display: block;
+        transition: all .3s ease-in-out;
+    }
+    
+    nav a:hover {
+        /*color: #000000;*/
+        transform: scale(1.2);
+        cursor: pointer;
+    }
+    
+    nav a:first-child {
+        margin-top: 7px;
+    }
+    
+    .active {
+        color: black;
+    }
+    
+    .rightbox {
+        /* float: right; */
+        width: 60%;
+        margin-left: 18%;
+        height: 100%;
+    }
+    
+    .profile,
+    .payment,
+    .subscription,
+    .privacy,
+    .settings {
+        transition: opacity .5s ease-in;
+        position: absolute;
+        width: 70%;
+    }
+    
+    h1 {
+        font-family: "Montserrat", sans-serif;
+        color: #777777;
+        font-size: 1.8em;
+        /* margin-top: 40px; */
+        font-weight: bolder;
+        margin-bottom: 35px;
+    }
+    /*h2 {
+color: #777777;
+font-family: "Roboto", sans-serif;
+width: 80%;
+text-transform: uppercase;
+font-size: 8px;
+letter-spacing: 1px;
+margin-left: 2px;
+}*/
+    /*p {
+border-width: 1px;
+border-style: solid;
+border-image: linear-gradient(to right, #000000, rgba(119, 119, 119, 0.5)) 1 0%;
+border-top: 0;
+width: 80%;
+font-family: "Montserrat", sans-serif;
+font-size: .7em;
+padding: 7px 0;
+color: #000000;
+}*/
+    
+    .btn {
+        float: right;
+        font-family: "Roboto", sans-serif;
+        text-transform: uppercase;
+        font-size: 10px;
+        border: none;
+        color: #8c8a88;
+    }
+    
+    .btn:hover {
+        text-decoration: none;
+        font-weight: 900;
+    }
+    
+    label {
+        font-family: "Roboto", sans-serif;
+        color: #8c8a88;
+    }
+    
+    input {
+        font-family: "Roboto", sans-serif;
+        padding: 2px;
+        margin: 0;
+    }
+    
+    .privacy h2 {
+        margin-top: 25px;
+    }
+    
+    .settings h2 {
+        margin-top: 25px;
+    }
+    
+    .noshow {
+        opacity: 0;
+    }
+    
+    footer {
+        position: absolute;
+        width: 20%;
+        bottom: 0;
+        right: -20px;
+        text-align: right;
+        font-size: 0.8em;
+        text-transform: uppercase;
+        letter-spacing: 2px;
+        font-family: "Roboto", sans-serif;
+    }
+    
+    footer p {
+        border: none;
+        padding: 0;
+    }
+    
+    footer a {
+        color: #ffffff;
+        text-decoration: none;
+    }
+    
+    footer a:hover {
+        color: #7d7d7d;
+    }
+    
+    .Hide {
+        display: none;
+    }
+    
+    .p1 {
+        margin-left: -25% !important;
+    }
+    
+    .nava {
+        list-style: none;
+        padding: 4px !important;
+        padding-top: 187% !important;
+        color: #FFFFFF;
+        font-size: 2.1em !important;
+    }
+    
+    .options {
+        width: 100%;
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: space-around;
+    }
+    
+    .op {
+        width: 100%;
+        padding-top: 21%;
+        /* background-color: black; */
+        padding-top: 94%;
+        height: fit-content;
+        cursor: pointer;
+        color: white;
+    }
+    
+    .bk {
+        /* background-color: red;*/
+        font-weight: bolder;
+        height: fit-content;
+        width: 100%;
+    }
+    
+    h5 {
+        font-size: 16px;
+        font-weight: bold;
+        color: #8c8a88;
+    }
+    
+    .input-icon-wrap {
+        border: 4px solid #244251;
+        display: flex;
+        border-radius: 6px;
+        flex-direction: row;
+        margin-top: 1%;
+        width: 91%;
+    }
+    
+    .input-icon {
+        background: #244251;
+    }
+    
+    .input-with-icon {
+        border: none;
+        flex: 1;
+    }
+    
+    .input-icon,
+    .input-with-icon {
+        padding: 10px;
+        color: white;
+    }
+    
+    .arrows {
+        width: 100%;
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: space-around;
+    }
+    
+    .ar {
+        width: 18%;
+        cursor: pointer;
+    }
+    
+    .draw-border {
+        box-shadow: inset 0 0 0 3px #ecc023;
+        transition: color 0.25s 0.0833333333s;
+        position: relative;
+    }
+    
+    .draw-border::before,
+    .draw-border::after {
+        border: 0 solid transparent;
+        box-sizing: border-box;
+        content: '';
+        pointer-events: none;
+        position: absolute;
+        width: 0;
+        height: 0;
+        bottom: 0;
+        right: 0;
+    }
+    
+    .draw-border::before {
+        border-bottom-width: 3px;
+        border-left-width: 3px;
+    }
+    
+    .draw-border::after {
+        border-top-width: 3px;
+        border-right-width: 3px;
+    }
+    
+    .draw-border:hover {
+        color: #ecc023;
+    }
+    
+    .draw-border:hover::before,
+    .draw-border:hover::after {
+        border-color: #ecc023;
+        transition: border-color 0s, width 0.25s, height 0.25s;
+        width: 100%;
+        height: 100%;
+    }
+    
+    .draw-border:hover::before {
+        transition-delay: 0s, 0s, 0.25s;
+    }
+    
+    .draw-border:hover::after {
+        transition-delay: 0s, 0.25s, 0s;
+    }
+    
+    .btn {
+        background: none;
+        border: none;
+        cursor: pointer;
+        line-height: 1.5;
+        color: #8c8a88;
+        padding: 1em 1em;
+        letter-spacing: 0.05rem;
+    }
+    
+    .import {
+        display: inline-flex;
+        padding: 4%;
+    }
+    
+    .boardStyle {
+        display: flex;
+        flex-direction: row;
+    }
+    
+    .form-control {
+        display: block;
+        width: 100%;
+        height: 34px;
+        padding: 6px 12px;
+        font-size: 14px;
+        line-height: 1.42857143;
+        color: #8c8a88;
+        background-color: #111;
+        background-image: none;
+        border: 2px solid;
+        border-radius: 4px;
+        -webkit-box-shadow: none;
+        box-shadow: none;
+        -webkit-transition: border-color ease-in-out .15s, -webkit-box-shadow ease-in-out .15s;
+        -o-transition: border-color ease-in-out .15s, box-shadow ease-in-out .15s;
+        transition: border-color ease-in-out .15s, box-shadow ease-in-out .15s;
+    }
+    
+    .HIDE {
+        display: none;
+    }
+    
+    .pgn {
+        height: 20vh;
+        overflow: auto;
+        width: 100%;
+        text-align: left;
+    }
+    /* .overlay-4fc5e {
+pointer-events: none;
+position: absolute;
+z-index: 10;
+opacity: 1.0;
+fill: #efb700;
+stroke: #efb700;
+} */
+    
+    .overlay-4fc5e {
+        pointer-events: none;
+        position: absolute;
+        z-index: 10;
+        opacity: 1.0;
+        fill: #efb700;
+        stroke: #efb700;
+        margin-left: -40%;
+        margin-top: 0%;
+        width: 100%;
+    }
+    
+    .overlay-4fc5e defs {
+        stroke: none;
+    }
+    
+    .overlay-group-672a1 {
+        opacity: 0.7;
+        stroke-linecap: square;
+        stroke-linejoin: round;
+        marker-end: url(#arrowhead);
+        marker-start: url(#bulb);
+        fill: none;
+    }
+    
+    .highlight-white {
+        box-shadow: inset 0 0 3px 3px yellow;
+        fill: #efb700;
+        stroke: #efb700;
+    }
+    
+    .highlight-black {
+        box-shadow: inset 0 0 3px 3px blue;
+    }
+    
+    #logo {
+        float: right;
+        margin-top: -10%;
+        margin-right: 3%;
+    }
+    
+    #contain {
+        position: relative;
+        width: 100%;
+        height: fit-content;
+    }
+    
+    #imageView {
+        top: 0%;
+        left: 0%;
+        position: absolute;
+        margin-top: 0%;
+        z-index: 111;
+    }
+    
+    #board {
+        z-index: 11;
+    }
+    
+    #imageTemp {
+        z-index: 1111;
+        position: absolute;
+        top: 1px;
+        left: 0px;
+        display: none;
+    }
+    
+    .button {
+        position: relative;
+        top: 50%;
+        width: 74px;
+        height: 36px;
+        margin: -20px auto 0 auto;
+        overflow: hidden;
+    }
+    
+    .button.r,
+    .button.r .layer {
+        border-radius: 100px;
+    }
+    
+    .button.b2 {
+        border-radius: 2px;
+    }
+    
+    .checkbox {
+        position: relative;
+        width: 100%;
+        height: 100%;
+        padding: 0;
+        margin: 0;
+        opacity: 0;
+        cursor: pointer;
+        z-index: 3;
+    }
+    
+    .knobs {
+        z-index: 2;
+    }
+    
+    .layer {
+        width: 100%;
+        background-color: #ebf7fc;
+        transition: 0.3s ease all;
+        z-index: 1;
+    }
+    /* Button 1 */
+    
+    #button-1 .knobs:before {
+        content: '';
+        position: absolute;
+        top: 4px;
+        left: 4px;
+        width: 20px;
+        height: 10px;
+        color: #fff;
+        font-size: 10px;
+        font-weight: bold;
+        text-align: center;
+        line-height: 1;
+        padding: 9px 4px;
+        background-color: grey;
+        border-radius: 50%;
+        transition: 0.3s cubic-bezier(0.18, 0.89, 0.35, 1.15) all;
+    }
+    
+    #button-1 .checkbox:checked+.knobs:before {
+        content: '';
+        left: 42px;
+        background-color: green;
+    }
+    
+    #button-1 .checkbox:checked~.layer {
+        background-color: grey;
+    }
+    
+    #button-1 .knobs,
+    #button-1 .knobs:before,
+    #button-1 .layer {
+        transition: 0.3s ease all;
+    }
+    
+    .overlay {
+        position: fixed;
+        top: 0;
+        bottom: 0;
+        z-index: 1111111;
+        left: 0;
+        right: 0;
+        background: rgba(0, 0, 0, 0.7);
+        transition: opacity 500ms;
+        visibility: hidden;
+        opacity: 0;
+    }
+    
+    .overlay:target {
+        visibility: visible;
+        opacity: 1;
+    }
+    
+    .popup {
+        margin: 70px auto;
+        padding: 20px;
+        background: #fff;
+        border-radius: 5px;
+        width: 30%;
+        height: 30%;
+        position: relative;
+        transition: all 5s ease-in-out;
+    }
+    
+    .popup h2 {
+        margin-top: 0;
+        color: #333;
+        font-family: Tahoma, Arial, sans-serif;
+    }
+    
+    .popup .close {
+        position: absolute;
+        top: 20px;
+        right: 30px;
+        transition: all 200ms;
+        font-size: 30px;
+        font-weight: bold;
+        text-decoration: none;
+        color: #333;
+    }
+    
+    .popup .close:hover {
+        color: #06D85F;
+    }
+    
+    .popup .content1 {
+        max-height: 100%;
+        overflow: auto;
+    }
+    
+    @media screen and (max-width: 700px) {
+        .box {
+            width: 70%;
+        }
+        .popup {
+            width: 70%;
+        }
+    }
+    
+    .wrapper1 {
+        margin: -18px auto;
+        display: flex;
+        flex-wrap: wrap;
+        width: 100%;
+    }
+    
+    .progress-bar1 {
+        height: 35px;
+        margin: 30px auto;
+        background: black;
+        padding: 2px;
+        width: 99%;
+    }
+    
+    .progress1 {
+        height: 100%;
+        background-size: 12000px 1px;
+        background-color: white;
+    }
+    
+    .container {
+        display: flex;
+        flex-direction: row-reverse;
+        width: 100%;
+        height: 100%;
+    }
+    
+    .sidebar1 {
+        background: #000;
+        height: 100%;
+        width: 18%;
+        transition: all .3s ease-out;
+    }
+    
+    .content.is-collapsed {
+        flex: 0;
+        background: white;
+    }
+    
+    .content {
+        flex: 3;
+        width: 23%;
+        position: fixed;
+        margin-left: -.65%;
+        flex-basis: 300px;
+        height: calc(100vh - 30px);
+        transition: all .3s ease-out;
+        background-color: #222222;
+        color: #8c8a88;
+        /* box-shadow: 0 19px 38px rgba(0, 0, 0, 0.30), 0 15px 12px rgba(0, 0, 0, 0.22); */
+        border-bottom: solid;
+    }
+    
+    .tg-list {
+        text-align: center;
+        display: flex;
+        align-items: center;
+    }
+    
+    .tg-list-item {
+        margin: 0 0;
+    }
+    
+    .tgl {
+        display: none;
+    }
+    
+    .tgl,
+    .tgl:after,
+    .tgl:before,
+    .tgl *,
+    .tgl *:after,
+    .tgl *:before,
+    .tgl+.tgl-btn {
+        box-sizing: border-box;
+    }
+    
+    .tgl::-moz-selection,
+    .tgl:after::-moz-selection,
+    .tgl:before::-moz-selection,
+    .tgl *::-moz-selection,
+    .tgl *:after::-moz-selection,
+    .tgl *:before::-moz-selection,
+    .tgl+.tgl-btn::-moz-selection {
+        background: none;
+    }
+    
+    .tgl::selection,
+    .tgl:after::selection,
+    .tgl:before::selection,
+    .tgl *::selection,
+    .tgl *:after::selection,
+    .tgl *:before::selection,
+    .tgl+.tgl-btn::selection {
+        background: none;
+    }
+    
+    .tgl+.tgl-btn {
+        outline: 0;
+        display: block;
+        width: 3em;
+        height: 1.5em;
+        position: relative;
+        cursor: pointer;
+        -webkit-user-select: none;
+        -moz-user-select: none;
+        -ms-user-select: none;
+        user-select: none;
+    }
+    
+    .tgl+.tgl-btn:after,
+    .tgl+.tgl-btn:before {
+        position: relative;
+        display: block;
+        content: "";
+        width: 50%;
+        height: 100%;
+    }
+    
+    .tgl+.tgl-btn:after {
+        left: 0;
+    }
+    
+    .tgl+.tgl-btn:before {
+        display: none;
+    }
+    
+    .tgl:checked+.tgl-btn:after {
+        left: 50%;
+    }
+    
+    .tgl-light+.tgl-btn {
+        background: #f0f0f0;
+        border-radius: 2em;
+        padding: 2px;
+        transition: all .4s ease;
+    }
+    
+    .tgl-light+.tgl-btn:after {
+        border-radius: 50%;
+        background: #fff;
+        transition: all .2s ease;
+    }
+    
+    .tgl-light:checked+.tgl-btn {
+        background: #9FD6AE;
+    }
+    
+    .tgl-ios+.tgl-btn {
+        background: #fbfbfb;
+        border-radius: 2em;
+        padding: 2px;
+        transition: all .4s ease;
+        border: 1px solid #e8eae9;
+    }
+    
+    .tgl-ios+.tgl-btn:after {
+        border-radius: 2em;
+        background: #fbfbfb;
+        transition: left 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275), padding 0.3s ease, margin 0.3s ease;
+        box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.1), 0 4px 0 rgba(0, 0, 0, 0.08);
+    }
+    
+    .tgl-ios+.tgl-btn:hover:after {
+        will-change: padding;
+    }
+    
+    .tgl-ios+.tgl-btn:active {
+        box-shadow: inset 0 0 0 2em #e8eae9;
+    }
+    
+    .tgl-ios+.tgl-btn:active:after {
+        padding-right: .8em;
+    }
+    
+    .tgl-ios:checked+.tgl-btn {
+        background: #86d993;
+    }
+    
+    .tgl-ios:checked+.tgl-btn:active {
+        box-shadow: none;
+    }
+    
+    .tgl-ios:checked+.tgl-btn:active:after {
+        margin-left: -.8em;
+    }
+    
+    hr.new1 {
+        border-top: 1px solid #c19f21;
+    }
+    
+    hr {
+        margin-top: 0px;
+        margin-bottom: 8px;
+        border: 0;
+        border-top: 1px solid #eee;
+    }
+    
+    .modal.right .modal-dialog {
+        -webkit-transform: translate3d(0%, 0, 0);
+        -ms-transform: translate3d(0%, 0, 0);
+        -o-transform: translate3d(0%, 0, 0);
+        transform: translate3d(0%, 0, 0);
+    }
+    /*Right*/
+    
+    .modal.right.fade .modal-dialog {
+        right: -420px;
+        -webkit-transition: opacity 0.3s linear, right 0.3s ease-out;
+        -moz-transition: opacity 0.3s linear, right 0.3s ease-out;
+        -o-transition: opacity 0.3s linear, right 0.3s ease-out;
+        transition: opacity 0.3s linear, right 0.3s ease-out;
+    }
+    
+    .modal.right.fade.in .modal-dialog {
+        right: 0;
+    }
+    /* ----- MODAL STYLE ----- */
+    
+    .modal-content {
+        border-radius: 0;
+        border: none;
+        background-color: #111;
+    }
+    
+    .modal-header {
+        border-bottom-color: #EEEEEE;
+        background-color: #111;
+        color: #8c8a88;
+    }
+    
+    .close {
+        color: #8c8a88;
+    }
+    
+    @import url("//cdnjs.cloudflare.com/ajax/libs/font-awesome/4.0.3/css/font-awesome.min.css");
+    .menu,
+    .menu-bar {
+        position: fixed;
+        top: 61.3px;
+        left: 93.5%;
+        height: 100%;
+        list-style-type: none;
+        margin: 0;
+        flex-basis: 300px;
+        height: calc(100vh - 30px);
+        padding: 0;
+        background: #222222;
+        z-index: 10;
+        overflow: hidden;
+        box-shadow: 2px 0 14px rgb(0, 0, 0);
+    }
+    
+    .menu li a {
+        display: block;
+        text-indent: -500em;
+        height: 5em;
+        width: 4em;
+        line-height: 5em;
+        text-align: center;
+        color: #72739f;
+        position: relative;
+        border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+        transition: background 0.1s ease-in-out;
+    }
+    
+    .menu li a:before {
+        font-family: FontAwesome;
+        text-indent: 0em;
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        font-size: 1.4em;
+    }
+    
+    .menu li a.search:before {
+        content: "\f0eb";
+    }
+    
+    .menu li a.archive:before {
+        content: "\f079";
+    }
+    
+    .menu li a.pencil:before {
+        content: "\f01e";
+    }
+    
+    .menu li a.contact:before {
+        content: "\f013";
+    }
+    
+    .menu li a.about:before {
+        content: "\f019";
+    }
+    
+    .menu li a.home:before {
+        content: "\f039";
+    }
+    
+    .menu li a.ar_analysis:before {
+        content: "\f0b2";
+    }
+    
+    .menu-bar li a:hover,
+    .menu li a:hover,
+    .menu li:first-child a {
+        background: #ecc023;
+        color: #fff;
+    }
+    
+    .menu-bar {
+        overflow: hidden;
+        left: 69em;
+        z-index: 5;
+        width: 0;
+        height: 0;
+        transition: all 0.1s ease-in-out;
+    }
+    
+    .menu-bar li a {
+        display: block;
+        height: 4em;
+        margin-top: -3.5%;
+        line-height: 4em;
+        text-align: center;
+        color: #72739f;
+        text-decoration: none;
+        position: relative;
+        font-family: verdana;
+        border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+        transition: background 0.1s ease-in-out;
+    }
+    
+    .menu-bar li:first-child a {
+        height: 5em;
+        background: #267fdd;
+        color: #fff;
+        line-height: 5
+    }
+    
+    .para {
+        color: #033f72;
+        padding-left: 100px;
+        font-size: 3em;
+        margin-bottom: 20px;
+    }
+    
+    .open {
+        width: 10em;
+        height: 100%;
+    }
+    
+    @media all and (max-width: 500px) {
+        .container {
+            margin-top: 100px;
+        }
+        .menu {
+            height: 5em;
+            width: 100%;
+        }
+        .menu li {
+            display: inline-block;
+            float: left;
+        }
+        .menu-bar li a {
+            width: 100%;
+        }
+        .menu-bar {
+            width: 100%;
+            left: 0;
+            height: 0;
+        }
+        .open {
+            width: 100%;
+            height: auto;
+        }
+        .para {
+            padding-left: 5px;
+        }
+    }
+    
+    @media screen and (max-height: 34em) {
+        .menu li,
+        .menu-bar {
+            font-size: 70%;
+        }
+    }
+    
+    @media screen and (max-height: 34em) and (max-width: 500px) {
+        .menu {
+            height: 3.5em;
+        }
+    }
+    
+    .nav1 {
+        margin: 100px auto 0 auto;
+        opacity: 0;
+        visibility: hidden;
+        border-radius: 4px;
+        -webkit-transition: .2s ease-out;
+        transition: .2s ease-out;
+        -webkit-transform: translateY(-50px) scale(0.5);
+        transform: translateY(-50px) scale(0.5);
+        -webkit-transition: .2s;
+        transition: .2s;
+    }
+    
+    .nav1 a {
+        text-decoration: none;
+        color: #fff;
+        display: block;
+        padding: 15px 0;
+        text-align: center;
+    }
+    
+    .nav1 a:hover {
+        background: #414141;
+        -webkit-transition: 0.2s ease;
+        transition: 0.2s ease;
+    }
+    
+    #check {
+        display: none;
+    }
+    
+    #check:checked~nav {
+        opacity: 1;
+        visibility: visible;
+        -webkit-transform: translateY(0);
+        transform: translateY(0);
+        -webkit-transform: translateY(0) scale(1);
+        transform: translateY(0) scale(1);
+        -webkit-transition: .2s;
+        transition: .2s;
+    }
+    
+    #check:checked~label {
+        -webkit-transform: scale(1.1);
+        transform: scale(1.1);
+    }
+    
+    .ul {
+        list-style: none;
+        margin: 0;
+        padding: 0;
+        width: 150px;
+    }
+    
+    .toolbar {
+        width: 10%;
+    }
+    /* Vertical toolbar */
+    
+    @import url("//netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap.min.css");
+    .toolbar-vertical {
+        top: 50px;
+        width: 60px;
+        right: 0;
+        /* flex-basis: 300px; */
+        height: calc(100vh - 30px);
+        background-color: #222222;
+        margin: 0;
+        box-shadow: 0px 0 6px rgb(0, 0, 0);
+        padding-top: 10px;
+        padding-bottom: 6px;
+        border-radius: 0 0 0 6px;
+        z-index: 1;
+        display: none;
+    }
+    
+    .btn-group {
+        margin-right: 2px;
+    }
+    
+    .btn-group-vertical {
+        margin-bottom: 6px;
+    }
+    
+    .glyphicon {
+        margin-top: 4px;
+        margin-bottom: 6px;
+        font-size: 2em;
+    }
+    
+    .btn>.caret {
+        margin-left: 4px;
+    }
+    
+    .btn-default {
+        color: #333;
+        background-color: #fff;
+        border-color: #ccc;
+        border: 4px solid;
+        border-radius: 6px;
+    }
+    
+    .btn-toolbar {
+        display: block;
+        flex-wrap: initial;
+        justify-content: safe;
+    }
+    
+    .btn-group-vertical>.btn:first-child:not(:last-child) {
+        border-top-left-radius: 4px;
+        border-top-right-radius: 4px;
+        border-bottom-right-radius: 0;
+        border-bottom-left-radius: 0;
+    }
+    
+    .btn-group-vertical>.btn,
+    .btn-group-vertical>.btn-group,
+    .btn-group-vertical>.btn-group>.btn {
+        display: block;
+        float: none;
+        width: 100%;
+        max-width: 100%;
+        border-radius: 6px;
+    }
+    
+    .btn-toolbar .btn,
+    .btn-toolbar .btn-group,
+    .btn-toolbar .input-group {
+        float: left;
+    }
+    
+    .btn-group-vertical>.btn,
+    .btn-group>.btn {
+        position: relative;
+        float: left;
+    }
+    
+    .btn-default {
+        color: #333;
+        background-color: #fff;
+        border-color: #ccc;
+        border-radius: 6px;
+    }
+    
+    #wrap:-webkit-full-screen {
+        max-width: none;
+        /* overide pre-existing margin styles */
+    }
+    
+    #board:-moz-full-screen {
+        max-width: none;
+        /* overide pre-existing margin styles */
+    }
+    
+    #board:-ms-fullscreen {
+        max-width: none;
+    }
+</style>
+<article id="container">
+    <div class="ham" style="float: right;">
+
+        <i class="fa fa-th HIDE" style="font-size:36px;color:white; cursor: pointer;">
+                              </i>
+    </div>
+    <div class="ak1">
+
+        <div class="one1">
+            <div id="contain">
+                <canvas id="imageView" width="650" height="650" style="display:none">
+                        </canvas>
+
+                <div id="board">
+                    <h1 class="vertical-align">LOADING...</h1>
+                </div>
+            </div>
+
+
+            <!-- <div id="fenBox"> -->
+            <!-- <button class="littleButton" id="setFEN">SET FEN</button> -->
+
+            {% comment %} <div class="col-xs-8">
+                <form class="form-horizontal" role="form">
+                    <div class="form-group">
+                        <label for="gameSelect" class="col-xs-4 control-label">Select game:</label>
+                        <div class="col-xs-8">
+                            <select id="gameSelect" class="form-control input-sm" onchange="loadGame(this.value);return false;"></select>
+                        </div>
+                    </div>
+                </form>
+                <div id="game-data">
+                </div>
+            </div> {% endcomment %}
+            <!-- </div> -->
+
+            <!-- <div class="input-icon-wrap">
+                <span class="input-icon">PGN</span>
+                <span id="pgn1" class="pgn"><input type="text" class="input-with-icon " id="pgn1" />    </span>
+
+            </div>
+
+            <div class="import">
+                <button class="btn draw-border" style="margin-right:16px;" id="setFEN">Enter FEN</button>
+                <button class="btn draw-border" style="margin-right:16px;" id="export">Export PGN</button>
+
+                <div class="box">
+                    <a class="btn draw-border" href="#popup1">Import PGN</a>
+                </div>
+
+            </div> -->
+
+            <!-- <p><label>Drawing tool: <select id="dtool"><option value="line">Line</option><option value="rect">Rectangle</option><option value="pencil">Pencil</option></select></label></p>
+            <div id="popup1" class="overlay">
+                <div class="popup">
+                    <h2>Choose Options</h2>
+                    <a class="close" href="#">&times;</a>
+                    <div class="content">
+                        <button class="btn draw-border" style="margin-right:16px;" id="setPGN">Enter PGN</button>
+                        <input type='file' onchange='onChooseFile(event, onFileLoad.bind(this, "contents"))' />
+                    </div>
+                </div>
+            </div> -->
+
+        </div>
+        <div class="two2" id="tar">
+
+            <div class="container">
+
+                <section class="content">
+                    <div id="side">
+                        
+                        <div class="wrapper1" style="display:none;">
+                            <div class="progress-bar1" style="">
+                                <div class="progress1" style="width:50%; background-position:1%;"></div>
+                            </div>
+
+
+                            <div><input id="setVal" type="hidden" pattern="\d*" /></div>
+                        </div>
+                        <div  style="height:fit-content;">
+                        {% for h in heats%}
+                       <h4> {{h.tournment}}</h4><br>
+                        {{h.player1}} VS {{h.player2}}
+                        {% endfor %}
+                        </div>
+                        <center>
+                            <h4>Game Moves</h4>
+                        </center>
+                        <div id="gauge" style="display:none;"></div>
+                        <!-- <div id="pgnBox" >
+                        <button class="littleButton" id="setPGN">SET PGN</button>
+                        <div id="pgn"></div>
+                      </div> -->
+                        <div id="pgn" style="height:250px;"></div>
+                    </div>
+
+                    <div class="buttonpanel1">
+                        <i class='fas fa-angle-double-left yellowButton' style='font-size:36px' id="btnStart"></i>
+                        <i class='fas fa-chevron-left yellowButton' style='font-size:36px' id="btnPrevious"></i>
+                        <i class='fa fa-play yellowButton' style='font-size:36px' onclick="hideplay()" id="playBtn"></i>
+                        <i class='fa fa-pause yellowButton' style='font-size:36px;   display:none' onclick="showplay()" id="pause"></i>
+                        <input type="hidden" id="playcount"><input type="hidden" id="movecount">
+                        <i class='fas fa-chevron-right yellowButton' style='font-size:36px' id="btnNext"></i>
+                        <i class='fas fa-angle-double-right yellowButton' style='font-size:36px' id="btnEnd"></i>
+
+
+
+
+                    </div>
+                    <div class="import">
+                        <a href="{% url 'dashboard:dashboard_view_analysis' %}"> <button class="btn draw-border" style="margin-right:16px;">Analysis</button></a>
+
+
+                    </div>
+
+            </div>
+
+            </section>
+
+
+        </div>
+        <!-- Modal -->
+        <div class="modal right fade" id="myModal2" tabindex="-1" role="dialog" aria-labelledby="myModalLabel2">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+
+                    <div class="modal-header">
+                        <h4 class="modal-title" id="myModalLabel2">Board Settings</h4>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+
+                    </div>
+
+                    <div class="modal-body">
+
+                        <div id="toolbar">
+                            <form>
+
+                                <div class="form-group">
+
+
+                                    <select class="form-control" id="board-style">
+<option value="wood"  selected>2D Board style</option>
+<option value="aluminium">Aluminium</option>
+<option value="cherry">Cherry</option>
+<option value="lapis">Lapis</option>
+<option value="marble">Marble</option>
+<option value="sand">Sand</option>
+<option value="slate">Slate</option>
+
+</select>
+                                </div>
+                                <div class="form-group">
+
+                                    <select class="form-control" id="piece-style">
+                <option value="alpha">2D Piece style</option>
+
+                <option value="leipzig">Leipzing</option>
+                <option value="dilena">Dilena</option>
+               <option value="chess24">Chess24</option>
+               <option value="symbol">Berlin</option>
+               <option value="metro">Berlin outline + shadow</option>
+               <option value="uscf">Uscf</option>
+
+</select>
+                                </div>
+                                <div class="form-group">
+
+                                    <label for="white-square-color">White squares color</label>
+                                    <input type="color" class="form-control" value="#F0EAB9" onchange="setSquaresColor(this.value)" id="white-square-color" />
+                                </div>
+                                <div class="form-group">
+                                    <label for="black-square-color">black squares color</label>
+                                    <input type="color" class="form-control" value="#CA906E" onchange="setSquaresColor(null, this.value)" id="black-square-color" />
+                                </div>
+                                <div class="form-group">
+                                    <label for="border-color">Border Color</label>
+                                    <input type="color" class="form-control" value="#CA906K" onchange="setSquaresColor(null, null,this.value)" id="border-color" />
+                                </div>
+
+
+
+
+                            </form>
+                        </div>
+                        
+                    </div>
+
+                </div>
+                <!-- modal-content -->
+            </div>
+            <!-- modal-dialog -->
+        </div>
+        <!-- modal -->
+        <!-- Modal -->
+        <div class="modal right fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+
+                    <div class="modal-header">
+                        <h4 class="modal-title" id="myModalLabel">PGN Setting</h4>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+
+                    </div>
+
+                    <div class="modal-body">
+
+                        <div class="import">
+                            <button class="btn draw-border" style="margin-right:16px;" id="setFEN">Enter FEN</button>
+                            <button class="btn draw-border" style="margin-right:16px;" id="export">Export PGN</button>
+
+                            <div class="box">
+                                <a class="btn draw-border" href="#popup1">Import PGN</a>
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                </div>
+                <!-- modal-content -->
+            </div>
+            <!-- modal-dialog -->
+        </div>
+        <!-- modal -->
+
+
+    </div>
+    <!-- container -->
+
+    </div>
+
+    <link rel="stylesheet" href="cdnjs.cloudflare.com/ajax/libs/font-awesome/4.0.3/css/font-awesome.min.css">
+    <ul class="menu">
+
+        <li title="Hide & Show Menu"><a href="#" class="menu-button btn1111 home">menu</a></li>
+
+        <li title="Hint"><a href="#" class="search" id="hintBtn">Hint</a></li>
+        <li title="Reset"><a href="#" class="pencil" id="resetBtn">pencil</a></li>
+        <!-- <li title="Pgn Setting"><a href="#" class="active about" data-toggle="modal" data-target="#myModal">about</a></li> -->
+        <li title="Flip"><a href="#" class="archive" id="flipBtn">archive</a></li>
+        <li title="Board Setting"><a href="#" class="contact" data-toggle="modal" data-target="#myModal2">contact</a></li>
+    </ul>
+
+    <!-- <ul class="">
+        <li><a href="#" class="menu-button btn1111">Menu</a></li>
+        <li><a href="#">Home</a></li>
+        <li><a href="#">Profile</a></li>
+        <li><a href="#">Editorial</a></li>
+        <li><a href="#">About</a></li>
+    </ul> -->
+    <div id="popup1" class="overlay">
+        <div class="popup">
+            <h2>Choose Options</h2>
+            <a class="close" href="#">&times;</a>
+            <div class="content1">
+                <button class="btn draw-border" style="margin-right:16px;" id="setPGN">Enter PGN</button>
+                <input type='file' onchange='onChooseFile(event, onFileLoad.bind(this, "contents"))' />
+            </div>
+        </div>
+    </div>
+
+</article>
+
+<script>
+    $(document).ready(function() {
+
+        function toggleSidebar() {
+            $(".button").toggleClass("active");
+            $("main").toggleClass("move-to-left");
+            $(".sidebar-item").toggleClass("active");
+        }
+
+        $(".button").on("click tap", function() {
+            toggleSidebar();
+        });
+
+        $(document).keyup(function(e) {
+            if (e.keyCode === 27) {
+                toggleSidebar();
+            }
+        });
+
+    });
+</script>
+<!-- <script>
+    $(document).ready(function() {
+        $(".menu-button").click(function() {
+            $(".content").hide();
+        })
+    })
+</script> -->
+<script>
+    $(".btn1111").click(function() {
+
+        var lable = $(".btn1111").text().trim();
+
+        if (lable == "Hide") {
+            $(".btn1111").text("Show");
+            $(".two2").show();
+        } else {
+            $(".btn1111").text("Hide");
+            $(".two2").hide();
+        }
+
+    });
+</script>
+<script>
+    jQuery(document).ready(function(e) {
+        function t(t) {
+            e(t).bind("click", function(t) {
+                t.preventDefault();
+                e(this).parent().fadeOut()
+            })
+        }
+        e(".dropdown-toggle").click(function() {
+            var t = e(this).parents(".button-dropdown").children(".dropdown-menu").is(":hidden");
+            e(".button-dropdown .dropdown-menu").hide();
+            e(".button-dropdown .dropdown-toggle").removeClass("active");
+            if (t) {
+                e(this).parents(".button-dropdown").children(".dropdown-menu").toggle().parents(".button-dropdown").children(".dropdown-toggle").addClass("active")
+            }
+        });
+        e(document).bind("click", function(t) {
+            var n = e(t.target);
+            if (!n.parents().hasClass("button-dropdown")) e(".button-dropdown .dropdown-menu").hide();
+        });
+        e(document).bind("click", function(t) {
+            var n = e(t.target);
+            if (!n.parents().hasClass("button-dropdown")) e(".button-dropdown .dropdown-toggle").removeClass("active");
+        })
+    });
+</script>
+
+
+<script>
+    function setSquaresColor(args, args1, args2) {
+        $('.white-1e1d7').css('background', args);
+        $('.black-3c85d').css('background', args1);
+        $('.board-b72b1').css('background', args2);
+    }
+</script>
+
+
+
+<script>
+    $('.SHOW').click(function() {
+        //$('#tar').show(500);
+        $('#tar').hide(500);
+        $('.SHOW').hide(0);
+        $('.HIDE').show(0);
+    });
+    $('.HIDE').click(function() {
+        $('#tar').show(500);
+        $('.SHOW').show(0);
+        $('.HIDE').hide(0);
+    });
+</script>
+<script>
+    //Write the game to the DOM
+    function writeGameText(g) {
+
+        //remove the header to get the moves
+        var h = g.header();
+        console.log(h);
+        var gameHeaderText = '<h5>' + h.White + ' - ' + h.Black + '</h5>';
+        gameHeaderText += '<h5>' + h.Event + ', ' + h.Site + ' ' + h.EventDate + '</h5>';
+        //$("#pgn11").html(gameHeaderText);
+
+        var pgn = g.pgn();
+        console.log(pgn);
+        var gameMoves = pgn.replace(/\[(.*?)\]/gm, '').replace(h.Result, '').trim();
+        console.log(gameMoves);
+        //format the moves so each one is individually identified, so it can be highlighted
+        moveArray = gameMoves.split(/([0-9]+\.\s)/).filter(function(n) {
+            return n;
+        });
+        console.log('movearry =', moveArray);
+        for (var i = 0, l = moveArray.length; i < l; ++i) {
+            var s = $.trim(moveArray[i]);
+            if (!/^[0-9]+\.$/.test(s)) { //move numbers
+                m = s.split(/\s+/);
+                console.log(m);
+                for (var j = 0, ll = m.length; j < ll; ++j) {
+                    m[j] = '<span class="gameMove' + (i + j - 1) + '"><a id="myLink" href="#" onclick="goToMove(' + (i + j - 1) + ');return false;">' + m[j] + '</a></span>';
+                }
+                s = m.join(' ');
+            }
+            moveArray[i] = s;
+        }
+
+        var gameData = '<div class="gameMoves">' + moveArray.join(' ');
+
+        gameData += ' <span class="gameResult">'
+        '</span></div>';
+        $("#pgn").html(gameData);
+
+    }
+
+    function adjustBoardWidth() {
+        var fudge = 250;
+        var windowWidth = $(window).width();
+        var windowHeight = $(window).height();
+        var desiredBoardWidth = $('.one1').outerWidth(true);
+        var desiredBoardHeight = windowHeight - $('#header').outerHeight(true) - $('#banner').outerHeight(true) - $('#footer').outerHeight(true) - fudge;
+
+        var boardDiv = $('#board');
+
+        // This is a chessboard.js board. Adjust for 1:1 aspect ratio
+        desiredBoardWidth = Math.min(desiredBoardWidth, desiredBoardHeight);
+        boardDiv.css('width', '90%');
+        boardDiv.css('height', '85%');
+
+        if (board !== undefined) {
+            board.resize();
+        }
+    }
+
+    $('#piece-style').change(function() {
+        var fen = board.position();
+        board.destroy();
+        board = createBoard($('#piece-style').val(), '2D', 'piece');
+        board.position(fen);
+        adjustBoardWidth();
+    });
+    $('#board-style').change(function() {
+        var fen = board.position();
+        board.destroy();
+        board = createBoard($('#board-style').val(), '2D', 'board');
+        board.position(fen);
+        adjustBoardWidth();
+    });
+    //buttons
+    $('#btnStart').on('click', function() {
+        game.reset();
+        currentPly = 0;
+        board.position(game.fen());
+    });
+    $('#btnPrevious').on('click', function() {
+        if (currentPly >= 0) {
+            game.undo();
+            currentPly--;
+            board.position(game.fen());
+        }
+    });
+    $('#btnNext').on('click', function() {
+        if (currentPly < gameHistory.length - 1) {
+            currentPly++;
+            game.move(gameHistory[currentPly].san);
+            board.position(game.fen());
+        }
+    });
+    $('#btnEnd').on('click', function() {
+        while (currentPly < gameHistory.length - 1) {
+            currentPly++;
+            game.move(gameHistory[currentPly].san);
+        }
+        board.position(game.fen());
+    });
+
+    function createBoard(pieceSet, args, args1, args2) {
+        // alert(pieceSet+"->"+args);
+        var cfg = {
+
+
+            position: 'start',
+
+        };
+
+
+
+
+        if (args == '2D') {
+            if (args1 == 'piece') {
+                var selectedVal = $("#board-style option:selected").val();
+                if (selectedVal == 'aluminium') {
+
+                    // cfg.boardTheme = ["#6fadd4", "#d0ceca"];
+                    return new ChessBoard('board', {
+                        pieceTheme: '/static/img/chesspieces/' + pieceSet + '/{piece}.png',
+
+                        position: 'start',
+
+                        boardTheme: ["url('/static/img/chesspieces/board/ab.png')", "url('/static/img/chesspieces/board/aw.png')", "url('/static/img/chesspieces/board/ab.png')"]
+
+                    });
+
+
+                }
+                if (selectedVal == 'cherry') {
+
+                    //cfg.boardTheme = ["#521b01", "#b45119"];
+                    return new ChessBoard('board', {
+                        pieceTheme: '/static/img/chesspieces/' + pieceSet + '/{piece}.png',
+
+                        position: 'start',
+
+                        boardTheme: ["url('/static/img/chesspieces/board/cherry1.png')", "url('/static/img/chesspieces/board/cherry2.png')", "url('/static/img/chesspieces/board/cherry2.png')"]
+
+                    });
+                }
+                if (selectedVal == 'lapis') {
+
+                    //cfg.boardTheme = ["#244251", "#c9b46b"];
+                    return new ChessBoard('board', {
+                        pieceTheme: '/static/img/chesspieces/' + pieceSet + '/{piece}.png',
+
+                        position: 'start',
+
+                        boardTheme: ["url('/static/img/chesspieces/board/wb.png')", "url('/static/img/chesspieces/board/ww.png')", "url('/static/img/chesspieces/board/wb.png')"]
+
+                    });
+                }
+                if (selectedVal == 'marble') {
+
+                    //cfg.boardTheme = ["#bb886e", "#e9d2b7"];
+                    return new ChessBoard('board', {
+                        pieceTheme: '/static/img/chesspieces/' + pieceSet + '/{piece}.png',
+
+                        position: 'start',
+
+                        boardTheme: ["url('/static/img/chesspieces/board/marble1.png')", "url('/static/img/chesspieces/board/marble2.png')", "url('/static/img/chesspieces/board/marble1.png')"]
+
+                    });
+                }
+                if (selectedVal == 'sand') {
+
+                    //cfg.boardTheme = ["#c8a97d", "#fdedb7"];
+                    return new ChessBoard('board', {
+
+                        position: 'start',
+
+                        boardTheme: ["url('/static/img/chesspieces/board/sand1.png')", "url('/static/img/chesspieces/board/sand2.png')", "url('/static/img/chesspieces/board/sand1.png')"],
+                        pieceTheme: '/static/img/chesspieces/' + pieceSet + '/{piece}.png'
+                    });
+                }
+                if (selectedVal == 'slate') {
+
+                    //cfg.boardTheme = ["#8c8c8c", "#c9c9c9"];
+                    return new ChessBoard('board', {
+                        pieceTheme: '/static/img/chesspieces/' + pieceSet + '/{piece}.png',
+
+                        position: 'start',
+
+                        boardTheme: ["url('/static/img/chesspieces/board/slate1.png')", "url('/static/img/chesspieces/board/slate2.png')", "url('/static/img/chesspieces/board/slate2.png')"]
+
+                    });
+                } else {
+                    //cfg.boardTheme = ["#ae6c37", "#d4b171"];#244251", "#c9b46b
+
+                    return new ChessBoard('board', {
+                        pieceTheme: '/static/img/chesspieces/' + pieceSet + '/{piece}.png',
+
+
+                        position: 'start',
+
+                        boardTheme: ["url('/static/img/chesspieces/board/lapis/lapis1.png')", "url('/static/img/chesspieces/board/lapis/lapis2.png')", "url('/static/img/chesspieces/board/lapis/lapis2.png')"]
+
+
+                    });
+                }
+
+
+
+                //cfg.pieceTheme = '/static/img/chesspieces/' + pieceSet + '/{piece}.png';
+
+
+                //return new ChessBoard('board', cfg);
+            }
+            if (args1 == 'board') {
+                if (pieceSet == 'aluminium') {
+                    // cfg.boardTheme = ["#6fadd4", "#d0ceca"];
+
+                    return new ChessBoard('board', {
+
+                        position: 'start',
+
+                        boardTheme: ["url('/static/img/chesspieces/board/ab.png')", "url('/static/img/chesspieces/board/aw.png')", "url('/static/img/chesspieces/board/ab.png')"]
+
+                    });
+
+                }
+                if (pieceSet == 'cherry') {
+
+                    //cfg.boardTheme = ["#521b01", "#b45119"];
+                    return new ChessBoard('board', {
+
+                        position: 'start',
+
+                        boardTheme: ["url('/static/img/chesspieces/board/cherry1.png')", "url('/static/img/chesspieces/board/cherry2.png')", "url('/static/img/chesspieces/board/cherry2.png')"]
+
+                    });
+                }
+                if (pieceSet == 'lapis') {
+
+                    //cfg.boardTheme = ["#244251", "#c9b46b"];
+                    return new ChessBoard('board', {
+
+                        position: 'start',
+
+                        boardTheme: ["url('/static/img/chesspieces/board/wb.png')", "url('/static/img/chesspieces/board/ww.png')", "url('/static/img/chesspieces/board/wb.png')"]
+
+                    });
+                }
+                if (pieceSet == 'marble') {
+
+                    //cfg.boardTheme = ["#bb886e", "#e9d2b7"];
+                    return new ChessBoard('board', {
+
+                        position: 'start',
+
+                        boardTheme: ["url('/static/img/chesspieces/board/marble1.png')", "url('/static/img/chesspieces/board/marble2.png')", "url('/static/img/chesspieces/board/marble1.png')"]
+
+                    });
+                }
+                if (pieceSet == 'sand') {
+
+                    //cfg.boardTheme = ["#c8a97d", "#fdedb7"];
+                    return new ChessBoard('board', {
+
+                        position: 'start',
+
+                        boardTheme: ["url('/static/img/chesspieces/board/sand1.png')", "url('/static/img/chesspieces/board/sand2.png')", "url('/static/img/chesspieces/board/sand1.png')"]
+
+                    });
+                }
+                if (pieceSet == 'slate') {
+
+                    //cfg.boardTheme = ["#8c8c8c", "#c9c9c9"];
+                    return new ChessBoard('board', {
+
+                        position: 'start',
+
+                        boardTheme: ["url('/static/img/chesspieces/board/slate1.png')", "url('/static/img/chesspieces/board/slate2.png')", "url('/static/img/chesspieces/board/slate2.png')"]
+
+                    });
+                }
+                return new ChessBoard('board', cfg);
+            }
+
+        } else {
+            //cfg.boardTheme = ["#ae6c37", "#d4b171"];#244251", "#c9b46b
+
+            return new ChessBoard('board', {
+
+                position: 'start',
+
+                boardTheme: ["url('/static/img/chesspieces/board/lapis/lapis1.png')", "url('/static/img/chesspieces/board/lapis/lapis2.png')", "url('/static/img/chesspieces/board/lapis/lapis2.png')"]
+
+
+            });
+        }
+
+        // }
+    }
+
+
+
+    adjustBoardWidth();
+    board = createBoard();
+
+    $(window).resize(function() {
+        adjustBoardWidth();
+    });
+    //key bindings
+    $(document).ready(function() {
+
+        $(document).keydown(function(e) {
+            if (e.keyCode == 39) { //right arrow
+                if (e.ctrlKey) {
+                    $('#btnEnd').click();
+                } else {
+                    $('#btnNext').click();
+                }
+                return false;
+            } else if (e.keyCode == 37) { //left arrow
+                if (e.ctrlKey) {
+                    $('#btnStart').click();
+                } else {
+                    $('#btnPrevious').click();
+                }
+                return false;
+            } else if (e.keyCode == 38) { //up arrow
+                if (currentGame > 0) {
+                    if (e.ctrlKey) {
+                        loadGame(0);
+                    } else {
+                        loadGame(currentGame - 1);
+                    }
+                }
+                $('#gameSelect').val(currentGame);
+                return false;
+            } else if (e.keyCode == 40) { //down arrow
+                if (currentGame < pgnData.length - 1) {
+                    if (e.ctrlKey) {
+                        loadGame(pgnData.length - 1);
+                    } else {
+                        loadGame(currentGame + 1);
+                    }
+                }
+                $('#gameSelect').val(currentGame);
+                return false;
+            }
+        });
+
+
+    });
+
+    //used for clickable moves in gametext
+    //not used for buttons for efficiency
+    function goToMove(ply) {
+        //console.log(ply);
+        if (ply > gameHistory.length - 1) ply = gameHistory.length - 1;
+        game.reset();
+        for (var i = 0; i <= ply; i++) {
+            game.move(gameHistory[i].san);
+        }
+        currentPly = i - 1;
+        board.position(game.fen());
+    }
+
+    var onChange = function onChange() { //fires when the board position changes
+        //highlight the current move
+        $("[class^='gameMove']").removeClass('highlight');
+        $('.gameMove' + currentPly).addClass('highlight');
+    }
+
+    function loadGame(i) {
+        game = new Chess();
+        game.load_pgn(pgnData[i]);
+        writeGameText(game);
+        gameHistory = game.history({
+            verbose: true
+        });
+        goToMove(-1);
+        currentGame = i;
+    }
+
+    var board, //the chessboard
+        game, //the current  game
+        games, //array of all loaded games
+        gameHistory,
+        currentPly,
+        currentGame;
+
+    $(document).ready(function() {
+        //start doing stuff
+        //alert(pgnData[0]);
+        //only need the headers here, issue raised on github
+        //read all the games to populate the select
+        for (var i = 0; i < pgnData.length; i++) {
+            var g = new Chess();
+            g.load_pgn(pgnData[i]);
+            var h = g.header();
+            $('#gameSelect')
+                .append($('<option></option>')
+                    .attr('value', i)
+                    .text(h.White + ' - ' + h.Black + ', ' + h.Date));
+        }
+
+        //set up the board
+        var cfg = {
+            //pieceTheme: '/chessboardjs/img/chesspieces/wikipedia/{piece}.png',
+            position: 'start',
+            //showNotation: false,
+            onChange: onChange
+        };
+        board = new ChessBoard('board', cfg);
+        $(window).resize(board.resize);
+
+        //load the first game
+        loadGame(0);
+        goToMove(gameHistory.length - 1);
+    });
+
+    //if (ply > moveList.length - 1) ply = moveList.length - 1;
+    //game.reset();
+    pgnData = [
+
+        {% for content in content %}
+        "{{ content.content|escapejs }}" {% if not forloop.last %}, {% endif %} {% endfor %}
+
+
+
+    ];
+
+    console.log(pgnData);
+    //alert(pgnData);
+</script>
+{% comment %}
+<script>
+    $(document).ready(function() {
+        var mm = document.getElementById('content').outerHTML;
+        var regex = /(<([^>]+)>)/ig
+        var body = mm
+        var result = body.replace(regex, "");
+        moveList = result;
+        alert(moveList);
+        var counts = JSON.parse("{{ tmpObj }}");
+        console.log(counts)
+        alert(counts);
+    });
+</script> {% endcomment %}
+<div id="content" style="display: none;">
+    {% for content in content %}
+    <li><a>{{ content.content }}</a></li>
+    {% endfor %}
+</div>
+
+{% endblock content %}
