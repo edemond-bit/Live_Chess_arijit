@@ -8,7 +8,9 @@ import datetime
 from django.core.mail import send_mail
 from django.contrib import messages
 from django.urls import reverse
-# from employee.forms import 
+# from employee.forms import
+from h5py._hl import dataset
+
 from tournment.models import Leave,Players,Heats,Document,Content
 from users.models import *
 from tournment.forms import LeaveCreationForm,PlayerCreationForm,HeatsCreationForm,DocumentForm
@@ -963,8 +965,13 @@ def user_dashboard(request):
 #     return render(request, 'app/dashboard.html',dataset)
 	
 
-def dashboard_view_analysis(request):
-	return render(request, 'app/dashboard1.html')
+def dashboard_view_analysis(request,id):
+	print('dddddddddddddddddddddddddddddddddddddddddddddddd')
+	heats = Heats.objects.filter(id=id)
+
+	dataset['heats'] = heats
+	return render(request, 'app/dashboard1.html',dataset)
+
 
 def test(request):
     # content = Content.objects.all()
@@ -1030,7 +1037,6 @@ def broadcast(request):
         form = DocumentForm(request.POST, request.FILES)
         #handle_uploaded_file(request.FILES['docfile'], str(request.FILES['docfile']))
         if form.is_valid():
-            
             newdoc = Document(docfile = request.FILES['docfile'])
             newdoc.save()
             options =[]
@@ -1053,12 +1059,28 @@ def broadcast(request):
     # Load documents for the list page
     documents = Document.objects.all()
     content = Content.objects.all()
-
-
     # Render list page with the documents and the form
-    
-    
     return render(request,'app/list.html',{'documents': documents,'content':content, 'form': form})
+
+
+def uploadpgn(request):
+	if request.method == 'POST':
+		pgn = request.POST['fd_pgn']
+		user = request.user
+
+		filename = 'media/documents/' . user + '.pgn'
+		fp = open(filename, 'w')
+		fp.write(pgn)
+		fp.close()
+		#tournment = Leave.objects.filter(user=user)
+		#print(tournment)
+		#print(request.POST.get('tournment'))
+		#print(request.POST.get('rounds'))
+		#print(request.POST.get('player1'))
+		#print(request.POST.get('player2'))
+
+
+
 
 from django.shortcuts import render
 from django.contrib.auth import login, authenticate

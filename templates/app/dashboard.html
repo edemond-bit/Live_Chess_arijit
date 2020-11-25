@@ -1182,18 +1182,14 @@ stroke: #efb700;
                               </i>
     </div>
     <div class="ak1">
-
         <div class="one1">
             <div id="contain">
                 <canvas id="imageView" width="650" height="650" style="display:none">
-                        </canvas>
-
+                    </canvas>
                 <div id="board">
                     <h1 class="vertical-align">LOADING...</h1>
                 </div>
             </div>
-
-
             <!-- <div id="fenBox"> -->
             <!-- <button class="littleButton" id="setFEN">SET FEN</button> -->
 
@@ -1241,9 +1237,7 @@ stroke: #efb700;
 
         </div>
         <div class="two2" id="tar">
-
             <div class="container">
-
                 <section class="content">
                     <div id="side">
                         
@@ -1251,27 +1245,38 @@ stroke: #efb700;
                             <div class="progress-bar1" style="">
                                 <div class="progress1" style="width:50%; background-position:1%;"></div>
                             </div>
-
-
                             <div><input id="setVal" type="hidden" pattern="\d*" /></div>
                         </div>
                         <div  style="height:fit-content;">
-                        {% for h in heats%}
-                       <h4> {{h.tournment}}</h4><br>
-                        {{h.player1}} VS {{h.player2}}
-                        {% endfor %}
+                            {% for h in heats%}
+                            <h4> {{h.tournment}}</h4><br>
+                            {{h.player1}} VS {{h.player2}}
+                            {% endfor %}
                         </div>
                         <center>
-                            <h4>Game Moves</h4>
+                            <h4>Game Moves(dsh)</h4>
                         </center>
                         <div id="gauge" style="display:none;"></div>
-                        <!-- <div id="pgnBox" >
-                        <button class="littleButton" id="setPGN">SET PGN</button>
-                        <div id="pgn"></div>
-                      </div> -->
+                            <!-- <div id="pgnBox" >
+                            <button class="littleButton" id="setPGN">SET PGN</button>
+                            <div id="pgn"></div>
+                            </div> -->
                         <div id="pgn" style="height:250px;"></div>
                     </div>
-
+                    {% if not user.is_superuser and user.is_authenticated and user.employee.membership.level != 2 and user.employee.membership.level != 3 %}
+                    <div class="buttonpanel1">
+                        <i class='fas fa-angle-double-left yellowButton' style='font-size:36px' onclick="validateusermsg()" id="btnStart"></i>
+                        <i class='fas fa-chevron-left yellowButton' style='font-size:36px' onclick="validateusermsg()" id="btnPrevious"></i>
+                        <i class='fa fa-play yellowButton' style='font-size:36px' onclick="validateusermsg()" id="playBtn"></i>
+                        <i class='fa fa-pause yellowButton' style='font-size:36px;   display:none' onclick="validateusermsg()" id="pause"></i>
+                        <i class='fas fa-chevron-right yellowButton' style='font-size:36px' onclick="validateusermsg()" id="btnNext"></i>
+                        <i class='fas fa-angle-double-right yellowButton' style='font-size:36px' onclick="validateusermsg()" id="btnEnd"></i>
+                    </div>
+                    <div class="import">
+                        <button class="btn draw-border" style="margin-right:16px;" onclick="validateusermsg()">Analysis</button></a>
+                    </div>
+                    {% endif %}
+                    {% if not user.is_superuser and user.is_authenticated and user.employee.membership.level == 2 or user.employee.membership.level == 3 %}
                     <div class="buttonpanel1">
                         <i class='fas fa-angle-double-left yellowButton' style='font-size:36px' id="btnStart"></i>
                         <i class='fas fa-chevron-left yellowButton' style='font-size:36px' id="btnPrevious"></i>
@@ -1280,69 +1285,66 @@ stroke: #efb700;
                         <input type="hidden" id="playcount"><input type="hidden" id="movecount">
                         <i class='fas fa-chevron-right yellowButton' style='font-size:36px' id="btnNext"></i>
                         <i class='fas fa-angle-double-right yellowButton' style='font-size:36px' id="btnEnd"></i>
-
-
-
-
                     </div>
                     <div class="import">
-                        <a href="{% url 'dashboard:dashboard_view_analysis' %}"> <button class="btn draw-border" style="margin-right:16px;">Analysis</button></a>
-
-
+                        {% for h in heats%}
+                        <a href="{% url 'dashboard:dashboard_view_analysis' h.id %}"> <button class="btn draw-border" style="margin-right:16px;">Analysis</button></a>
+                        {% endfor %}
                     </div>
-
+                    {% endif %}
+                    {% if user.is_superuser and user.is_staff %}
+                    <div class="buttonpanel1">
+                        <i class='fas fa-angle-double-left yellowButton' style='font-size:36px' id="btnStart"></i>
+                        <i class='fas fa-chevron-left yellowButton' style='font-size:36px' id="btnPrevious"></i>
+                        <i class='fa fa-play yellowButton' style='font-size:36px' onclick="hideplay()" id="playBtn"></i>
+                        <i class='fa fa-pause yellowButton' style='font-size:36px;   display:none' onclick="showplay()" id="pause"></i>
+                        <input type="hidden" id="playcount"><input type="hidden" id="movecount">
+                        <i class='fas fa-chevron-right yellowButton' style='font-size:36px' id="btnNext"></i>
+                        <i class='fas fa-angle-double-right yellowButton' style='font-size:36px' id="btnEnd"></i>
+                    </div>
+                    <div class="import">
+                        {% for h in heats%}
+                        <a href="{% url 'dashboard:dashboard_view_analysis' h.id %}"> <button class="btn draw-border" style="margin-right:16px;">Analysis</button></a>
+                        {% endfor %}
+                    </div>
+                    {% endif %}
+                </section>
             </div>
-
-            </section>
-
-
         </div>
         <!-- Modal -->
         <div class="modal right fade" id="myModal2" tabindex="-1" role="dialog" aria-labelledby="myModalLabel2">
             <div class="modal-dialog" role="document">
                 <div class="modal-content">
-
                     <div class="modal-header">
                         <h4 class="modal-title" id="myModalLabel2">Board Settings</h4>
                         <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-
                     </div>
-
                     <div class="modal-body">
-
                         <div id="toolbar">
                             <form>
-
                                 <div class="form-group">
-
-
                                     <select class="form-control" id="board-style">
-<option value="wood"  selected>2D Board style</option>
-<option value="aluminium">Aluminium</option>
-<option value="cherry">Cherry</option>
-<option value="lapis">Lapis</option>
-<option value="marble">Marble</option>
-<option value="sand">Sand</option>
-<option value="slate">Slate</option>
-
-</select>
+                                    <option value="wood"  selected>2D Board style</option>
+                                    <option value="aluminium">Aluminium</option>
+                                    <option value="cherry">Cherry</option>
+                                    <option value="lapis">Lapis</option>
+                                    <option value="marble">Marble</option>
+                                    <option value="sand">Sand</option>
+                                    <option value="slate">Slate</option>
+                                    </select>
                                 </div>
                                 <div class="form-group">
-
                                     <select class="form-control" id="piece-style">
-                <option value="alpha">2D Piece style</option>
-
-                <option value="leipzig">Leipzing</option>
-                <option value="dilena">Dilena</option>
-               <option value="chess24">Chess24</option>
-               <option value="symbol">Berlin</option>
-               <option value="metro">Berlin outline + shadow</option>
-               <option value="uscf">Uscf</option>
-
-</select>
+                                        <option value="alpha">2D Piece style</option>
+                                        <option value="leipzig">Leipzing</option>
+                                        <option value="dilena">Dilena</option>
+                                        <option value="chess24">Chess24</option>
+                                        <option value="symbol">Berlin</option>
+                                        <option value="metro">Berlin outline + shadow</option>
+                                        <option value="uscf">Uscf</option>
+                                </select>
                                 </div>
                                 <div class="form-group">
-
                                     <label for="white-square-color">White squares color</label>
                                     <input type="color" class="form-control" value="#F0EAB9" onchange="setSquaresColor(this.value)" id="white-square-color" />
                                 </div>
@@ -1354,15 +1356,9 @@ stroke: #efb700;
                                     <label for="border-color">Border Color</label>
                                     <input type="color" class="form-control" value="#CA906K" onchange="setSquaresColor(null, null,this.value)" id="border-color" />
                                 </div>
-
-
-
-
                             </form>
                         </div>
-                        
                     </div>
-
                 </div>
                 <!-- modal-content -->
             </div>
@@ -1373,52 +1369,37 @@ stroke: #efb700;
         <div class="modal right fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
             <div class="modal-dialog" role="document">
                 <div class="modal-content">
-
                     <div class="modal-header">
                         <h4 class="modal-title" id="myModalLabel">PGN Setting</h4>
                         <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-
                     </div>
-
                     <div class="modal-body">
-
                         <div class="import">
                             <button class="btn draw-border" style="margin-right:16px;" id="setFEN">Enter FEN</button>
                             <button class="btn draw-border" style="margin-right:16px;" id="export">Export PGN</button>
-
                             <div class="box">
                                 <a class="btn draw-border" href="#popup1">Import PGN</a>
                             </div>
-
                         </div>
-
                     </div>
-
                 </div>
                 <!-- modal-content -->
             </div>
             <!-- modal-dialog -->
         </div>
         <!-- modal -->
-
-
     </div>
     <!-- container -->
-
     </div>
-
     <link rel="stylesheet" href="cdnjs.cloudflare.com/ajax/libs/font-awesome/4.0.3/css/font-awesome.min.css">
     <ul class="menu">
-
         <li title="Hide & Show Menu"><a href="#" class="menu-button btn1111 home">menu</a></li>
-
         <li title="Hint"><a href="#" class="search" id="hintBtn">Hint</a></li>
         <li title="Reset"><a href="#" class="pencil" id="resetBtn">pencil</a></li>
         <!-- <li title="Pgn Setting"><a href="#" class="active about" data-toggle="modal" data-target="#myModal">about</a></li> -->
         <li title="Flip"><a href="#" class="archive" id="flipBtn">archive</a></li>
         <li title="Board Setting"><a href="#" class="contact" data-toggle="modal" data-target="#myModal2">contact</a></li>
     </ul>
-
     <!-- <ul class="">
         <li><a href="#" class="menu-button btn1111">Menu</a></li>
         <li><a href="#">Home</a></li>
@@ -1436,10 +1417,13 @@ stroke: #efb700;
             </div>
         </div>
     </div>
-
 </article>
 
 <script>
+    function validateusermsg(){
+        swal('Buy membership to avail this feature');
+    }
+
     $(document).ready(function() {
 
         function toggleSidebar() {

@@ -1,0 +1,68 @@
+{% load static %}
+<html lang="en">
+  <head>
+    <title>Membership Subscription</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="{% static 'css/gateway/global.css' %}" />
+    <script src="https://polyfill.io/v3/polyfill.min.js?version=3.52.1&features=fetch"></script>
+    <script src="https://js.stripe.com/v3/"></script>
+  </head>
+  <body>
+    <section>
+      <div class="product">
+        <img
+          src="{% static 'img/logo.png' %}"
+          alt="Live Chess Membership Subscription"
+          width="100"
+          height="100"
+        />
+        <div class="description">
+          <h3>Product: {{ product }}</h3>
+          <h5>$ {{ price }}</h5>
+        </div>
+        <div id="m_product" hidden>
+            {{ product_id }}
+        </div>
+		<div id="csrf_id" hidden>
+            {{ csrf_token }}
+        </div>
+      </div>
+      <button id="checkout-button">Checkout</button>
+    </section>
+  </body>
+  <script type="text/javascript">
+    // Create an instance of the Stripe object with your publishable API key
+    var stripe = Stripe("pk_test_51HWPgxCMmNngA38zrauFBOtjQsr5xdrYAX5rvKSlIl50RudZ9VZwjmBXusQnQgZGFmkZ1Jic2PWnQG5n1OP1OG0R00FMj3vkww");
+    var checkoutButton = document.getElementById("checkout-button");
+    let pdoduct_id = document.getElementById("m_product").innerText;
+    let csrftoken = document.getElementById("csrf_id").innerText;
+
+    checkoutButton.addEventListener("click", function () {
+      fetch("/gateway/create_payment/", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+	      "X-CSRFToken": csrftoken,
+        },
+        body: pdoduct_id
+      })
+        .then(function (response) {
+          return response.json();
+        })
+        .then(function (session) {
+          return stripe.redirectToCheckout({ sessionId: session.id });
+        })
+        .then(function (result) {
+          // If redirectToCheckout fails due to a browser or network
+          // error, you should display the localized error message to your
+          // customer using error.message.
+          if (result.error) {
+            alert(result.error.message);
+          }
+        })
+        .catch(function (error) {
+          console.error("Error:", error);
+        });
+    });
+  </script>
+</html>

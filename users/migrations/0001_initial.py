@@ -41,6 +41,8 @@ class Migration(migrations.Migration):
                 ('is_blocked', models.BooleanField(default=False, help_text='button to toggle employee block and unblock', verbose_name='Is Blocked')),
                 ('is_deleted', models.BooleanField(default=False, help_text='button to toggle employee deleted and undelete', verbose_name='Is Deleted')),
                 ('user', models.OneToOneField(on_delete=django.db.models.deletion.CASCADE, to=settings.AUTH_USER_MODEL)),
+                ('membership', models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.CASCADE, to='users.Membership')),
+                ('purchase_date', models.DateTimeField(auto_now_add=True, verbose_name='Purchase_Date')),
             ],
             options={
                 'verbose_name_plural': 'Users',
@@ -167,6 +169,24 @@ class Migration(migrations.Migration):
                 'verbose_name_plural': 'Banks',
                 'ordering': ['-name', '-account'],
                 'verbose_name': 'Bank',
+            },
+        ),
+        migrations.CreateModel(
+            name='Membership',
+            fields=[
+                ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
+                ('name', models.CharField(max_length=20, null=True, verbose_name='Type of Membership')),
+                ('level', models.PositiveIntegerField(blank=True, default=0, null=True, verbose_name='Level')),
+                ('currency', models.CharField(max_length=20, null=True, verbose_name='Type of Currency')),
+                ('price', models.PositiveIntegerField(blank=True, default=0, null=True, verbose_name='Price')),
+                ('product', models.CharField(max_length=50, null=True, verbose_name='Name of Product')),
+                ('created', models.DateTimeField(auto_now_add=True, null=True, verbose_name='Created')),
+                ('updated', models.DateTimeField(auto_now=True, null=True, verbose_name='Updated')),
+            ],
+            options={
+                'verbose_name_plural': 'Memberships',
+                'ordering': ['-name', '-level'],
+                'verbose_name': 'Membership',
             },
         ),
     ]

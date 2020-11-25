@@ -1,0 +1,97 @@
+/*!
+ * chessboard.js $version$
+ *
+ * Copyright 2013 Chris Oakman
+ * Released under the MIT license
+ * https://github.com/oakmac/chessboardjs/blob/master/LICENSE
+ *
+ * Date: $date$
+ */
+
+
+/* clearfix */
+
+.clearfix-7da63 {
+    clear: both;
+}
+
+
+/* board */
+
+.board-b72b1 {
+    border: 42px solid transparent;
+    /* border-image: url("/static/img/chesspieces/board/wb.37d2957fb13c.png"); */
+    /* background: url("/static/img/chesspieces/board/lapis/lapis2.2885b8a56632.png"); */
+    border-radius: 14px;
+    -webkit-box-sizing: content-box;
+    -moz-box-sizing: content-box;
+    box-sizing: content-box;
+    margin-left: 3%;
+    border-width: thick;
+    border-width: 20px 20px 20px 20px;
+}
+
+
+/* square */
+
+.square-55d63 {
+    float: left;
+    position: relative;
+    /* disable any native browser highlighting */
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    -khtml-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+}
+
+
+/* white square */
+
+.white-1e1d7 {
+    background-color: #244251;
+    /* background-image: url("/static/img/chesspieces/board/lapis/lapis1.a072f11dba4c.png"); */
+    color: #b58863;
+}
+
+
+/* black square */
+
+.black-3c85d {
+    background-color: #c9b46b;
+    /* background-image: url("/static/img/chesspieces/board/aw.5b3f78d0cbfa.png"); */
+    color: #f0d9b5;
+}
+
+
+/* highlighted square */
+
+.highlight1-32417,
+.highlight2-9c5d2 {
+    -webkit-box-shadow: inset 0 0 3px 3px yellow;
+    -moz-box-shadow: inset 0 0 3px 3px yellow;
+    box-shadow: inset 0 0 3px 3px yellow;
+}
+
+
+/* notation */
+
+.notation-322f9 {
+    cursor: default;
+    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+    font-size: 14px;
+    position: absolute;
+}
+
+.alpha-d2270 {
+    bottom: -21px;
+    right: 3px;
+    color: white !important;
+}
+
+.numeric-fc462 {
+    top: 2px;
+    left: -12px;
+    color: white !important;
+}

@@ -19,34 +19,34 @@
                         <p class="hidden-lg hidden-md">Dashboard</p>
                     </a>
                 </li>
+                    {% if not request.user.is_aunthicated and request.user.employee.membership.level != 1 and request.user.employee.membership.level != 3 %}
+                    <li class="dropdown" onclick="validateusermsg();">
+                    {% else %}
+                    <li class="dropdown">
+                    {% endif %}
+                        <a href="" class="dropdown-toggle" data-toggle="dropdown">
+                            <p>
+                                Tournments
+                                <b class="caret"></b>
+                            </p>
 
-
-                <li class="dropdown">
-                    <a href="" class="dropdown-toggle" data-toggle="dropdown">
-                        <p>
-                            Tournments
-                            <b class="caret"></b>
-                        </p>
-
-                    </a>
-                    <ul class="dropdown-menu">
-                        {% if request.user.is_superuser %}
-                        <li><a href="{% url 'dashboard:leaveslist' %}">Pending Tournments</a></li>
-                        <li><a href="{% url 'dashboard:approvedleaveslist' %}">Approved Tournments</a></li>
-                        <li><a href="{% url 'dashboard:canceleaveslist' %}">Cancelled Tournments</a></li>
-                        <li><a href="{% url 'dashboard:leavesrejected' %}">Rejected Tournments</a></li>
-                        <li class="divider"></li>
-                        <li><a href="{% url 'dashboard:createleave' %}">Create Tournments</a></li>
-                        {% else %}
-                        <li><a href="{% url 'dashboard:createleave' %}">Create Tournments</a></li>
-                        <li class="divider"></li>
-
-                        {% endif %}
-                        <li><a href="{% url 'dashboard:adminleavetable' %}">All Tournments</a></li>
-                    </ul>
-                </li>
-
-
+                        </a>
+                        <ul class="dropdown-menu">
+                            {% if request.user.is_superuser %}
+                            <li><a href="{% url 'dashboard:leaveslist' %}">Pending Tournments</a></li>
+                            <li><a href="{% url 'dashboard:approvedleaveslist' %}">Approved Tournments</a></li>
+                            <li><a href="{% url 'dashboard:canceleaveslist' %}">Cancelled Tournments</a></li>
+                            <li><a href="{% url 'dashboard:leavesrejected' %}">Rejected Tournments</a></li>
+                            <!--<li class="divider"></li>-->
+                            <li><a href="{% url 'dashboard:createleave' %}">Create Tournments</a></li>
+                            <li><a href="{% url 'dashboard:adminleavetable' %}">All Tournments</a></li>
+                            {% elif request.user.is_authenticated and request.user.employee.membership.level == 1 or request.user.employee.membership.level == 3 %}
+                            <li><a href="{% url 'dashboard:createleave' %}">Create Tournments</a></li>
+                            <!--<li class="divider"></li>-->
+                            <li><a href="{% url 'dashboard:adminleavetable' %}">All Tournments</a></li>
+                            {% endif %}
+                        </ul>
+                    </li>
                 <!-- {% if request.user.is_superuser and request.user.is_staff %}
                 <li class="dropdown">
                     <a href="" class="dropdown-toggle" data-toggle="dropdown">
@@ -126,4 +126,9 @@
             </ul>
         </div>
     </div>
+    <script>
+    function validateusermsg(){
+        swal('Buy membership to avail this feature');
+    }
+    </script>
 </nav>

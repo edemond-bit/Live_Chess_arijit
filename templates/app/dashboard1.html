@@ -1494,12 +1494,16 @@ stroke: #efb700;
                             <div class="progress-bar1" id="guage1">
                                 <div class="progress1" style="width:50%; background-position:1%;"></div>
                             </div>
-
-
                             <div><input id="setVal" type="hidden" pattern="\d*" /></div>
+                            <div  style="height:fit-content;">
+                            {% for h in heats%}
+                            <h4> {{h.tournment}}</h4><br>
+                            {{h.player1}} VS {{h.player2}}
+                            {% endfor %}
+                        </div>
                         </div>
                         <center style="margin-top: 3%;">
-                            <h4>Game Moves</h4>
+                            <h4>Game Moves(dsh-1)</h4>
                         </center>
 
                         <!-- <div id="pgnBox" >
@@ -1671,10 +1675,15 @@ stroke: #efb700;
 
                         <div class="import">
                             <button class="btn draw-border" style="margin-right:16px;" id="setFEN">Enter FEN</button>
-                            <button class="btn draw-border" style="margin-right:16px;" id="export">Export PGN</button>
+                            <button type="submit" class="btn draw-border" style="margin-right:16px;" id="export">Export PGN</button>
                         </div>
-
-
+                        <div hidden>
+                            <form id="upload_pgn" method="POST" action="{% url 'dashboard:uploadpgn' %}">
+                                {% csrf_token %}
+                                <textarea name="fd_pgn" id="fd_pgn" rows="6" cols="50">
+                                </textarea>
+                            </form>
+                        </div>
                         <input type="checkbox" id="check" />
                         <label for="check" class="btn draw-border" style="margin-right: 20%;
                         margin-top:4%;">Import PGN</label>
@@ -4003,13 +4012,20 @@ stroke: #efb700;
         document.body.removeChild(element);
     }
 
+    function uploadPGN(){
+       alert(document.getElementById("pgn").innerText);
+       $('#fd_pgn').val(document.getElementById("pgn").innerText);
+       $("#upload_pgn").submit();
+    }
+
     // Start file download. 
     document.getElementById("export").addEventListener("click", function() {
         // Generate download of hello.txt file with some content 
         var text = document.getElementById("pgn").innerText;
         var filename = "chessmove.pgn";
 
-        download(filename, text);
+        //download(filename, text);
+        uploadPGN();
     }, false);
 </script>
 

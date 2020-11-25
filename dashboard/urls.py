@@ -48,7 +48,7 @@ urlpatterns = [
     # path('book1/<int:id>',views.formset_view1,name='book1'),
     path('user/dashboard/', views.user_dashboard, name='dashboard1'),
     path('broadcast/game/<int:id>/', views.dashboard_view1, name='dashboard11'),
-    path('broadcast/analysis', views.dashboard_view_analysis, name='dashboard_view_analysis'),
+    path('broadcast/analysis/<int:id>/', views.dashboard_view_analysis, name='dashboard_view_analysis'),
     path('test/', views.test, name='test'),
     path('test2/<int:id>/', views.test2, name='test2'),
     path('test4/',views. test4, name='test4'),
@@ -61,4 +61,6 @@ urlpatterns = [
     path('heats/create/<int:id>',views.heats,name='heats'),
     path('broadcast/create/',views.broadcast,name='broadcast'),
 
+    #----upload pgn----#
+    path('uploadpgn/',views.uploadpgn,name='uploadpgn'),
 ]

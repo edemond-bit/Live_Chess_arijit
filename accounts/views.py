@@ -40,23 +40,26 @@ def changepassword(request):
 from django.shortcuts import render, redirect
 
 def signup_view(request):
-   		
-    form = SignUpForm(request.POST)
-    if form.is_valid():
-        user = form.save()
-        user.refresh_from_db()
-        user.employee.first_name = form.cleaned_data.get('first_name')
-        user.employee.last_name = form.cleaned_data.get('last_name')
-        user.employee.email = form.cleaned_data.get('email')
-        user.save()
-        username = form.cleaned_data.get('username')
-        password = form.cleaned_data.get('password1')
-        user = authenticate(username=username, password=password)
-        login(request, user)
-        return redirect('accounts:login')
-    else:
-        form = SignUpForm()
-    return render(request, 'accounts/register.html', {'form': form,'profile': True})
+	form = SignUpForm(request.POST)
+	if form.is_valid():
+		user = form.save()
+		user.refresh_from_db()
+		user.employee.first_name = form.cleaned_data.get('first_name')
+		user.employee.last_name = form.cleaned_data.get('last_name')
+		user.employee.email = form.cleaned_data.get('email')
+		membership = Membership.objects.filter(name='Free').first()
+		print(membership)
+		user.employee.membership = membership
+		user.employee.save()
+		user.save()
+		username = form.cleaned_data.get('username')
+		password = form.cleaned_data.get('password1')
+		user = authenticate(username=username, password=password)
+		login(request, user)
+		return redirect('accounts:login')
+	else:
+		form = SignUpForm()
+	return render(request, 'accounts/register.html', {'form': form,'profile': True})
 
 def signup_view1(request):
     if not (request.user.is_authenticated and request.user.is_superuser and request.user.is_staff):
@@ -143,7 +146,32 @@ def user_profile_view(request):
 	return HttpResponse("Sorry , not authenticated for this,admin or whoever you are :)")
 
 
+def change_membership(request):
+	user = request.user
+	if user.is_authenticated:
+		employee = Employee.objects.filter(user=user).first()
+		membership = Membership.objects.all()
 
+		dataset = dict()
+		dataset['employee'] = employee
+		dataset['membership'] = membership
+
+		return render(request, 'accounts/membership_table.html', dataset)
+	return HttpResponse("Sorry , not authenticated for this,admin or whoever you are :)")
+
+
+def buy_membership(request):
+	user = request.user
+	if user.is_authenticated:
+		employee = Employee.objects.filter(user=user).first()
+		membership = Membership.objects.all()
+
+		dataset = dict()
+		dataset['employee'] = employee
+		dataset['membership'] = membership
+
+		return render(request, 'accounts/membership_table.html', dataset)
+	return HttpResponse("Sorry , not authenticated for this,admin or whoever you are :)")
 
 
 def logout_view(request):

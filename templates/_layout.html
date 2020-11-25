@@ -87,25 +87,9 @@
 
     <!-- Animation library for notifications   -->
     <link href="{% static 'css/animate.min.css' %}" rel="stylesheet" />
-
-
-
-
-
-
-
-
-
-
-
-
     <link rel="shortcut icon" type="image/png" href="{% static 'img/logo3.png' %}" />
-
-
 </head>
-
 <body>
-
     <style type="text/css">
         .title-h3 {
             font-weight: bold;
@@ -176,7 +160,6 @@
                     </center>
 
                 </div>
-
                 <ul class="nav">
                     {% if not request.user.is_superuser and request.user.is_authenticated %}
                     <li class="active">
@@ -203,10 +186,17 @@
                             <p>Tournment</p>
                         </a>
                     </li>
-                    {% endif %} {% if not request.user.is_superuser and request.user.is_authenticated %}
+                    {% elif request.user.is_authenticated %}
+                    {% if request.user.employee.membership.level != 1 and request.user.employee.membership.level != 3 %}
+                    <li onclick="validateusermsg();">
+                    {% else %}
                     <li>
-
+                    {% endif %}
+                        {% if request.user.employee.membership.level == 1 or request.user.employee.membership.level == 3 %}
                         <a href="{% url 'dashboard:staffleavetable' %}">
+                        {% else %}
+                        <a>
+                        {% endif %}
                             <i class="pe-7s-news-paper"></i>
                             <p>Tournment</p>
                         </a>
@@ -218,7 +208,13 @@
                             <p>User</p>
                         </a>
                     </li>
-
+                    {% endif %} {% if not request.user.is_superuser and request.user.is_authenticated%}
+                    <li>
+                        <a href="{% url 'accounts:changemembership' %}">
+                            <i class="pe-7s-ticket"></i>
+                            <p>Membership</p>
+                        </a>
+                    </li>
                     {% endif %} {% if not request.user.is_superuser and request.user.is_authenticated %}
                     <li>
                         <a href="{% url 'accounts:userprofile' %}">
@@ -319,6 +315,10 @@
         </div>
 
         <script type="text/javascript">
+            function validateusermsg(){
+                swal('Buy membership to avail this feature');
+            }
+
             function previewImage(input) {
                 if (input.files && input.files[0]) {
                     var reader = new FileReader();

@@ -9,8 +9,11 @@ https://docs.djangoproject.com/en/2.1/topics/settings/
 For the full list of settings and their values, see
 https://docs.djangoproject.com/en/2.1/ref/settings/
 """
+import sys
+
 import django_heroku
 import os
+
 # from .email_info import *
 # # Email Settings
 # EMAIL_HOST = EMAIL_HOST
@@ -20,26 +23,27 @@ import os
 # EMAIL_USE_TLS = EMAIL_USE_TLS
 EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 EMAIL_HOST = 'smtp.gmail.com'
-EMAIL_HOST_USER = 'nautiyalakshat7@gmail.com' #test
-EMAIL_HOST_PASSWORD = 'akshatn1111'#test
+EMAIL_HOST_USER = 'nautiyalakshat7@gmail.com'  # test
+EMAIL_HOST_PASSWORD = 'akshatn1111'  # test
 EMAIL_PORT = 587
 EMAIL_USE_TLS = True
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
-
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/2.1/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = '@jdf01zf3u9vyqv62^kjf=f2%^#sh2taf0x=6%#o0-_xa=1gb*'
+#SECRET_KEY = '@jdf01zf3u9vyqv62^kjf=f2%^#sh2taf0x=6%#o0-_xa=1gb*'
+SECRET_KEY = os.environ.get('DJANGO_SECRET_KEY', '@jdf01zf3u9vyqv62^kjf=f2%^#sh2taf0x=6%#o0-_xa=1gb*')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+#DEBUG = True
+DEBUG = os.environ.get('DJANGO_DEBUG', '') != 'False'
 
-ALLOWED_HOSTS = ['chess-live-final.herokuapp.com']
-
+# ALLOWED_HOSTS = ['chess-live-final.herokuapp.com']
+ALLOWED_HOSTS = ['*']
 
 # Email Settings
 # EMAIL_HOST = 'smtp.gmail.com'
@@ -48,7 +52,12 @@ ALLOWED_HOSTS = ['chess-live-final.herokuapp.com']
 # EMAIL_PORT = 587
 # EMAIL_USE_TLS = True
 
+# FGN FTP Settings
+FTP_URL = 'tde-projects.com'
+FTP_USER = 'tdeprojects'
+FTP_PASSWORD = 'TProDigiRA0434@020892#'
 
+# Payment Gateway Settings
 
 # Application definition
 
@@ -72,8 +81,7 @@ INSTALLED_APPS = [
     'users',
     'tournment',
     'timezone_field',
-    
-    
+    'gateway',
 ]
 
 MIDDLEWARE = [
@@ -91,7 +99,7 @@ ROOT_URLCONF = 'hrsuit.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [os.path.join(BASE_DIR, 'templates'),],
+        'DIRS': [os.path.join(BASE_DIR, 'templates'), ],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -106,7 +114,6 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'hrsuit.wsgi.application'
 
-
 # Database
 # https://docs.djangoproject.com/en/2.1/ref/settings/#databases
 
@@ -116,7 +123,6 @@ DATABASES = {
         'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
     }
 }
-
 
 # Password validation
 # https://docs.djangoproject.com/en/2.1/ref/settings/#auth-password-validators
@@ -136,7 +142,6 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
-
 # Internationalization
 # https://docs.djangoproject.com/en/2.1/topics/i18n/
 
@@ -150,12 +155,6 @@ USE_L10N = True
 
 USE_TZ = True
 
-
-
-
-
-
-
 CRISPY_TEMPLATE_PACK = 'bootstrap4'
 
 # Static files (CSS, JavaScript, Images)
@@ -164,21 +163,17 @@ CRISPY_TEMPLATE_PACK = 'bootstrap4'
 STATIC_URL = '/static/'
 
 # STATIC FILES WILL BE SERVED FROM STATIC_CDN WHEN WE ARE LIVE - OUT SIDE OF PROJECT
-STATIC_ROOT = os.path.join(os.path.dirname(BASE_DIR),'static_cdn','static_root')
+STATIC_ROOT = os.path.join(os.path.dirname(BASE_DIR), 'static_cdn', 'static_root')
 
-
-#THIS KEEPS THE PROJECT FILES - CSS/JS/IMAGES/FONTS
+# THIS KEEPS THE PROJECT FILES - CSS/JS/IMAGES/FONTS
 STATICFILES_DIRS = [
-    os.path.join(BASE_DIR,'static_in_proj','our_static'),
+    os.path.join(BASE_DIR, 'static_in_proj', 'our_static'),
 ]
-
 
 # MEDIA - UPLOADED FILES/IMAGES
 MEDIA_URL = '/media/'
 
 # MEDIA FILES WILL BE SERVED FROM STATIC_CDN WHEN WE ARE LIVE
-MEDIA_ROOT = os.path.join(BASE_DIR,'static_cdn','media_root')
-
-
+MEDIA_ROOT = os.path.join(BASE_DIR, 'static_cdn', 'media_root')
 
 django_heroku.settings(locals())

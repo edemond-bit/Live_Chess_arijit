@@ -55,7 +55,6 @@
             <li>
                 {% if user.is_authenticated %}
                 <a href="{% url 'dashboard:dashboard1' %}" style='color: #ecc023;'><i class="fa fa-user" aria-hidden="true"style='font-size:24px;color: #ecc023;'></i> <span class="nav-label"> Dashboard</span></a>{% endif %}
-
                 <a href="/" style='color: #ecc023;'><i class='fas fa-book-reader' style='font-size:26px;color: #ecc023;'></i> </span><span class="nav-label"> Home</span></a>
                 <a href="{% url 'dashboard:staffleavetable' %}" style='color: #ecc023;'><i class='fas fa-network-wired' style='font-size:20px;color: #ecc023;'></i> <span class="nav-label"> Tournment</span></a>
                 <a href="{% url 'accounts:userprofile' %}" style='color: #ecc023;'><i class='fab fa-android' style='font-size:24px;color: #ecc023;'></i> <span class="nav-label"> Profile</span></a>

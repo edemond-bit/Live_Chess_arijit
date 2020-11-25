@@ -1,5 +1,5 @@
 from django.contrib import admin
-from users.models import Role,Department,Nationality,Religion,Employee,Bank,Emergency,Relationship,Details
+from users.models import Role,Department,Nationality,Religion,Employee,Bank,Emergency,Relationship,Details,Membership
 
 
 
@@ -11,5 +11,6 @@ admin.site.register(Employee)
 # admin.site.register(Bank)
 # admin.site.register(Emergency)
 # admin.site.register(Relationship)
+admin.site.register(Membership)
 
 	

@@ -25,7 +25,8 @@ urlpatterns = [
     path('',views.index_view,name='home'),
     path('accounts/',include('accounts.urls',namespace='accounts')),
     path('dashboard/',include('dashboard.urls',namespace='dashboard')),
-     path('forgot_password/', include('django.contrib.auth.urls')),
+    path('gateway/',include('gateway.urls',namespace='gateway')),
+    path('forgot_password/', include('django.contrib.auth.urls')),
 ]
 
 
