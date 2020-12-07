@@ -1071,11 +1071,11 @@ def uploadpgn(request):
 		#tournment = Leave.objects.filter(user=user)
 		#print(tournment)
 		print(request.POST['fd_tournment'])
-		#print(request.POST['fd_rounds'])
+		#print(request.POST['fd_round'])
 		print(request.POST['fd_player1'])
 		print(request.POST['fd_player2'])
-		rounds = request.POST.get('rounds')
-		x = int(rounds)
+		round = request.POST.get('round')
+		x = int(round)
 		print(x)
 
 
