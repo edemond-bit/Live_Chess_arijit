@@ -966,11 +966,12 @@ def user_dashboard(request):
 	
 
 def dashboard_view_analysis(request,id):
-	print('dddddddddddddddddddddddddddddddddddddddddddddddd')
-	heats = Heats.objects.filter(id=id)
-
-	dataset['heats'] = heats
-	return render(request, 'app/dashboard1.html',dataset)
+	leave = get_object_or_404(Heats, id=id)
+	heat = leave.id
+	heats = Heats.objects.filter(id=heat)
+	dataset1 = dict()
+	dataset1['heats'] = heats
+	return render(request, 'app/dashboard1.html',dataset1)
 
 
 def test(request):
@@ -1017,16 +1018,12 @@ def dashboard_view1(request,id):
     # for i in heat:
     #     h=i.tournment.id
     #     print(h)
-    # print('tour name: ',heat)    
-	
-	
-	
+    # print('tour name: ',heat)
     # leaves = Leave.objects.all_approved_leaves()
     heats = Heats.objects.filter(id=heat)
     dataset['content'] = content
     dataset['heats'] = heats
     return render(request, 'app/dashboard.html',dataset)	
-
 
 
 def test4(request):
@@ -1067,19 +1064,19 @@ def uploadpgn(request):
 	if request.method == 'POST':
 		pgn = request.POST['fd_pgn']
 		user = request.user
-
-		filename = 'media/documents/' . user + '.pgn'
-		fp = open(filename, 'w')
-		fp.write(pgn)
-		fp.close()
+		#filename = 'media/documents/ {}.pgn'.format(user)
+		#fp = open(filename, 'w')
+		#fp.write(pgn)
+		#fp.close()
 		#tournment = Leave.objects.filter(user=user)
 		#print(tournment)
-		#print(request.POST.get('tournment'))
-		#print(request.POST.get('rounds'))
-		#print(request.POST.get('player1'))
-		#print(request.POST.get('player2'))
-
-
+		print(request.POST['fd_tournment'])
+		#print(request.POST['fd_rounds'])
+		print(request.POST['fd_player1'])
+		print(request.POST['fd_player2'])
+		rounds = request.POST.get('rounds')
+		x = int(rounds)
+		print(x)
 
 
 from django.shortcuts import render

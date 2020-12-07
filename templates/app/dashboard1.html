@@ -1479,13 +1479,10 @@ stroke: #efb700;
 
                         <button class="btn btn-default" data-toggle="tooltip" data-placement="left" data-container="body" title="Delete Arrow"><span class="fas fa-trash"  id="btn_delar" style="font-size:18px;"></span></button>
                         <p style="display: none;"><label>Drawing tool: <select id="dtool"><option value="line">Line</option><option value="rect">Rectangle</option><option value="pencil">Pencil</option></select></label></p>
-
                     </div>
-
                 </div>
             </div>
             <div class="container">
-
                 <section class="content" id="body">
                     <div id="side">
                         <div id="status"></div>
@@ -1495,13 +1492,13 @@ stroke: #efb700;
                                 <div class="progress1" style="width:50%; background-position:1%;"></div>
                             </div>
                             <div><input id="setVal" type="hidden" pattern="\d*" /></div>
-                            <div  style="height:fit-content;">
+                        </div>
+                        <!--<div  style="height:fit-content;">
                             {% for h in heats%}
                             <h4> {{h.tournment}}</h4><br>
                             {{h.player1}} VS {{h.player2}}
                             {% endfor %}
-                        </div>
-                        </div>
+                        </div>-->
                         <center style="margin-top: 3%;">
                             <h4>Game Moves(dsh-1)</h4>
                         </center>
@@ -1535,37 +1532,21 @@ stroke: #efb700;
 
                     </div>
                     <hr class="new1">
-
-
-
-
-
-
             </div>
-
             </section>
-
-
         </div>
         <!-- Modal -->
         <div class="modal right fade" id="myModal2" tabindex="-1" role="dialog" aria-labelledby="myModalLabel2">
             <div class="modal-dialog" role="document">
                 <div class="modal-content">
-
                     <div class="modal-header">
                         <h4 class="modal-title" id="myModalLabel2">Board Settings</h4>
                         <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-
                     </div>
-
                     <div class="modal-body">
-
                         <div id="toolbar">
                             <form>
-
                                 <div class="form-group">
-
-
                                     <select class="form-control" id="board-style">
                                         <option value="wood"  selected>2D Board style</option>
                                         <option value="aluminium">Aluminium</option>
@@ -1574,11 +1555,9 @@ stroke: #efb700;
                                         <option value="marble">Marble</option>
                                         <option value="sand">Sand</option>
                                         <option value="slate">Slate</option>
-
                                     </select>
                                 </div>
                                 <div class="form-group">
-
                                     <select class="form-control" id="piece-style">
                                         <option value="alpha">2D Piece style</option>
                                         <option value="leipzig">Leipzing</option>
@@ -1587,11 +1566,9 @@ stroke: #efb700;
                                         <option value="symbol">Berlin</option>
                                         <option value="metro">Berlin outline + shadow</option>
                                         <option value="uscf">Uscf</option>
-
                                     </select>
                                 </div>
                                 <div class="form-group">
-
                                     <label for="white-square-color">White Squares Color</label>
                                     <input type="color" class="form-control" value="#F0EAB9" onchange="setSquaresColor(this.value)" id="white-square-color" />
                                 </div>
@@ -1603,15 +1580,9 @@ stroke: #efb700;
                                     <label for="border-color">Border Color</label>
                                     <input type="color" class="form-control" value="#b52828" onchange="setSquaresColor(null, null,this.value)" id="border-color" />
                                 </div>
-
-
-
-
-
                             </form>
                         </div>
                         <div class="bk">
-
                             <div class="theme-switch-wrapper ">
                                 <h5> Background Theme </h5>
                                 <label class="theme-switch" for="checkbox">
@@ -1622,7 +1593,6 @@ stroke: #efb700;
                         </div>
                         <div id="gaugebox">
                             <div id="optionsBox">
-
                                 <br>
                                 <label for="engineMenu">Chess Engine:</label>
                                 <select id="engineMenu">
@@ -1653,7 +1623,6 @@ stroke: #efb700;
                             </div>
                         </div>
                     </div>
-
                 </div>
                 <!-- modal-content -->
             </div>
@@ -1682,6 +1651,12 @@ stroke: #efb700;
                                 {% csrf_token %}
                                 <textarea name="fd_pgn" id="fd_pgn" rows="6" cols="50">
                                 </textarea>
+                                {% for h in heats%}
+                                <input type="text" name="fd_tournment" id="fd_tournment" value="{{h.tournment}}">
+                                <!--<input type="text" name="fd_round" id="fd_round" value="{{h.round}}">-->
+                                <input type="text" name="fd_player1" id="fd_player1" value="{{h.player1}}">
+                                <input type="text" name="fd_player2" id="fd_player2" value="{{h.player2}}">
+                                {% endfor %}
                             </form>
                         </div>
                         <input type="checkbox" id="check" />
