@@ -32,6 +32,7 @@ urlpatterns = [
     path('tournment/approved/all/',views.leaves_approved_list,name='approvedleaveslist'),
     path('tournment/cancel/all/',views.cancel_leaves_list,name='canceleaveslist'),
     path('tournment/all/view/<int:id>/',views.leaves_view,name='userleaveview'),
+    path('tournment/all/edit/<int:id>/',views.leaves_edit,name='userleaveedit'),
     path('tournment/view/table/',views.view_my_leave_table,name='staffleavetable'),
     path('tournment/approve/<int:id>/',views.approve_leave,name='userleaveapprove'),
     path('tournment/unapprove/<int:id>/',views.unapprove_leave,name='userleaveunapprove'),

@@ -188,13 +188,12 @@
                         {% else %}
                         <td style="color:">{{ leave.status }}</td>
                         {% endif %}
-
                         <td>
                             <a href="{% url 'dashboard:userleaveview' leave.id %}">
-                                              VIEW
-                                          </a>
-
+                             VIEW
+                            </a>
                         </td>
+
                     </tr>
 
                     {% endfor %}

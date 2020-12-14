@@ -1521,10 +1521,6 @@ stroke: #efb700;
                         <input type="hidden" id="playcount"><input type="hidden" id="movecount">
                         <i class='fas fa-chevron-right yellowButton' style='font-size:36px' id="forwardBtn"></i>
                         <i class='fas fa-angle-double-right yellowButton' style='font-size:36px' id="endBtn"></i>
-
-
-
-
                     </div>
                     <div class="import">
                         <a href="{% url 'dashboard:test' %}"> <button class="btn draw-border" style="margin-right:16px;">Live Game</button></a>
@@ -3999,8 +3995,8 @@ stroke: #efb700;
         var text = document.getElementById("pgn").innerText;
         var filename = "chessmove.pgn";
 
-        //download(filename, text);
-        uploadPGN();
+        download(filename, text);
+        //uploadPGN();
     }, false);
 </script>
 

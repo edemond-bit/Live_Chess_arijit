@@ -58,7 +58,9 @@ def signup_view(request):
 		login(request, user)
 		return redirect('accounts:login')
 	else:
-		form = SignUpForm()
+		if request.POST:
+			form = SignUpForm()
+			messages.error(request, "Follow Password Rules", extra_tags='alert alert-warning alert-dismissible show')
 	return render(request, 'accounts/register.html', {'form': form,'profile': True})
 
 def signup_view1(request):

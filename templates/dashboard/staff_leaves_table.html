@@ -201,6 +201,13 @@
 							      	</a>
 
                         </td>
+                        {% if leave.is_approved %}
+                        <td>
+                            <a href="{% url 'dashboard:userleaveedit' leave.id %}">
+                             EDIT
+                            </a>
+                        </td>
+                        {% endif %}
                     </tr>
 
                     {% endfor %}
