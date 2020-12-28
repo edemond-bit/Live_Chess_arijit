@@ -14,7 +14,7 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name='employee',
             name='purchase_date',
-            field=models.DateTimeField(auto_now_add=True, default=django.utils.timezone.now, verbose_name='Purchase_Date'),
+            field=models.DateTimeField(auto_now_add=True, blank=True, null=True,  default=django.utils.timezone.now, verbose_name='Purchase_Date'),
             preserve_default=False,
         ),
     ]

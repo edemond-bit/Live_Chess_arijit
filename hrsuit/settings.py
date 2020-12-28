@@ -82,6 +82,8 @@ INSTALLED_APPS = [
     'tournment',
     'timezone_field',
     'gateway',
+
+    'rest_framework',
 ]
 
 MIDDLEWARE = [
@@ -92,6 +94,10 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+]
+
+CRON_CLASSES = [
+    'cron.cron_job.MyCronJob',
 ]
 
 ROOT_URLCONF = 'hrsuit.urls'

@@ -44,8 +44,8 @@ class PlayerCreationForm(forms.ModelForm):
     
 	class Meta:
 		model = Players
-		
-		fields = ['name','last','gender','rating','title','ranking','COUNTRY_RATING']
+
+		fields = ['tournment','name','last','gender','rating','title','ranking','COUNTRY_RATING',]
 		
 		exclude = ['updated','created']
 	def clean_renewal_date(self):
@@ -79,7 +79,7 @@ class HeatsCreationForm(forms.ModelForm):
         
         
   
-from django.forms import formset_factory
+# from django.forms import formset_factory
 
 
 # HeatFormset = formset_factory(HeatsCreationForm, extra=1) 
@@ -90,6 +90,8 @@ from django.forms import formset_factory
 # 	class Meta:
 # 		model = Comment
 # 		exclude = ['updated','created','leave']
-class DocumentForm(forms.Form):
-    docfile = forms.FileField(widget=forms.FileInput(attrs={'onchange':'previewImage(this);'}))
-       
+
+class DocumentForm(forms.ModelForm):
+    class Meta:
+        model = Document
+        fields = ['tournament', 'rounds', 'games', 'loc',]

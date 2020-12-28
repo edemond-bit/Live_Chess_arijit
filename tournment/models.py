@@ -1,5 +1,5 @@
 from django.db import models
-from .manager import LeaveManager,HeatManager
+from .manager import LeaveManager,HeatManager, DocumentManager
 from django.utils.translation import ugettext as _
 from django.contrib.auth.models import User
 from django.utils import timezone
@@ -241,6 +241,7 @@ class Players(models.Model):
     rating = models.PositiveIntegerField(_('FIDE Rating'),null=True,blank=True,default=0)
     COUNTRY_RATING= models.PositiveIntegerField(_('COUNTRY RATING'),null=True,blank=True,default=0)
     title = models.CharField(_('Title'),max_length=20,default=Women_GM,choices=PLAYERTYPE,blank=False)
+    tournment = models.ForeignKey(Leave, on_delete=models.CASCADE, null=True)
 	
     ranking = models.PositiveIntegerField(_('FIDE Ranking'),null=True,blank=True,default=0)
     created = models.DateTimeField(verbose_name=_('Created'),auto_now_add=True)
@@ -340,15 +341,23 @@ class Heats(models.Model):
 	# 	self.is_approved = True
 	# 	self.status = 'approved'
 	# 	self.save()    
-		
-        	
-		
+
 class Document(models.Model):
-    docfile = models.FileField(_('PGN'),upload_to='profiles',null=True,help_text='upload image size less than 2.0MB')
-    
+	tournament = models.ForeignKey(Leave,on_delete=models.CASCADE,null=True)
+	rounds = models.CharField(max_length=125, null=True, blank=True)
+	games = models.CharField(max_length=125, null=True, blank=True)
+	loc = models.CharField(max_length=300, verbose_name="PGN File Location", null=True, blank=True)
+	docfile = models.FileField(_('PGN'),upload_to='profiles',null=True,help_text='upload image size less than 2.0MB')
+	objects = DocumentManager()
+
+	def __str__(self):
+		return self.tournament.__str__() + ",  Rounds - " + self.rounds.__str__() + ",  games - " +self.id.__str__()
+
 class Content(models.Model):
-    
-    content = models.TextField()    
+	content = models.TextField()
+
+	def __int__(self):
+		return self.id
     
        
         

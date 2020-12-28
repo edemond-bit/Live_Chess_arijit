@@ -78,7 +78,7 @@
             <div class="form-body">
                 <div class="multitab-form-area">
                     <div class="tab-links-area">
-                        <h1>Create Tournment</h1>
+                        <h1>Create Tournament</h1>
                         <p>Fill up all the details</p>
                         <hr>
                         <ul>
@@ -152,19 +152,37 @@
                             </div>  -->
                         </div>
                         </form>
-
-                        <div class="tabs-panels" id="upload-pgn">
+                        <div class="tabs-panels" id="uplaod-pgn">
                             <div class="tab-part">
                                 <h4>Upload PGN</h4>
+                                <hr>
+                                <form enctype="multipart/form-data" action="{% url 'dashboard:uploadpgn' %}" method="POST">
+                                    {% csrf_token %} {{ formset1.management_form }}
 
-                                <a href="{% url 'dashboard:broadcast' %}">
-                                    <p><input type="submit" value="Upload" /></p>
-                                </a>
+                                    <table class="table">
+                                        {% for form in formset1 %}
+                                        <tr class=" formset1_row">
+
+                                            <td>
+                                                {{ form | crispy}}
+                                            </td>
+                                        </tr>
+                                        {% endfor %}
+                                    </table>
+
+<!--                                <a href="{% url 'dashboard:broadcast' %}">-->
+                            </div>
+                            <div class="next-btn">
+                                <button type="submit">Submit</button>
+                            </div>
+<!--                            <a href="{% url 'dashboard:broadcast' %}">-->
+<!--                                    <p><input type="submit" value="Upload" /></p>-->
+<!--                                </a>-->
+<!--                                </a>-->
                                 <!-- <p>A user must be created before adding as an employee to the system</p> -->
 
-                            </div>
-
                         </div>
+                        </form>
                         <div class="note">
                             <a href="{% url 'dashboard:broadcast' %}">
                                 <p><input type="submit" value="Upload" /></p>
@@ -193,6 +211,11 @@
 <script type="text/javascript">
     $('.formset_row').formset({
         addText: 'add opponents',
+        deleteText: 'remove',
+        prefix: 'form'
+    });
+    $('.formset1_row').formset({
+        addText: 'add row',
         deleteText: 'remove',
         prefix: 'form'
     });

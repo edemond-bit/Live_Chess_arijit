@@ -1,4 +1,6 @@
 {% extends "_layout.html" %} {% load static %} {% block title %} Dashboard {% endblock %} {% block content %}
+<meta http-equiv="refresh" content="20">
+
 <style type="text/css">
     /*.pen body {
     padding-top:50px;
@@ -1175,7 +1177,7 @@ stroke: #efb700;
         max-width: none;
     }
 </style>
-<article id="container">
+<article id="container" >
     <div class="ham" style="float: right;">
 
         <i class="fa fa-th HIDE" style="font-size:36px;color:white; cursor: pointer;">
@@ -1248,8 +1250,9 @@ stroke: #efb700;
                             <div><input id="setVal" type="hidden" pattern="\d*" /></div>
                         </div>
                         <div  style="height:fit-content;">
-                            {% for h in heats%}
-                            <h4> {{h.tournment}}</h4><br>
+                            {% for h in document%}
+                            <h4> {{h.tournament}}</h4><br>
+                             {{h.round}}<br>
                             {{h.player1}} VS {{h.player2}}
                             {% endfor %}
                         </div>
@@ -1287,7 +1290,7 @@ stroke: #efb700;
                         <i class='fas fa-angle-double-right yellowButton' style='font-size:36px' id="btnEnd"></i>
                     </div>
                     <div class="import">
-                        {% for h in heats%}
+                        {% for h in document%}
                         <a href="{% url 'dashboard:dashboard_view_analysis' h.id %}"> <button class="btn draw-border" style="margin-right:16px;">Analysis</button></a>
                         {% endfor %}
                     </div>
@@ -1303,7 +1306,7 @@ stroke: #efb700;
                         <i class='fas fa-angle-double-right yellowButton' style='font-size:36px' id="btnEnd"></i>
                     </div>
                     <div class="import">
-                        {% for h in heats%}
+                        {% for h in document%}
                         <a href="{% url 'dashboard:dashboard_view_analysis' h.id %}"> <button class="btn draw-border" style="margin-right:16px;">Analysis</button></a>
                         {% endfor %}
                     </div>
@@ -1418,6 +1421,16 @@ stroke: #efb700;
         </div>
     </div>
 </article>
+
+<script>
+<!--$(document).ready(function () {-->
+<!--    setInterval(function() {-->
+<!--        let fr;-->
+<!--        fr = document.getElementById("get_data").textContent-->
+<!--        onFileLoad(fr);-->
+<!--    }, 10000);-->
+<!--});-->
+</script>
 
 <script>
     function validateusermsg(){
@@ -1940,9 +1953,6 @@ stroke: #efb700;
 
         {% for content in content %}
         "{{ content.content|escapejs }}" {% if not forloop.last %}, {% endif %} {% endfor %}
-
-
-
     ];
 
     console.log(pgnData);

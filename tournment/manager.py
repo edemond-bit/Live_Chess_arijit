@@ -54,5 +54,9 @@ class LeaveManager(models.Manager):
 class HeatManager(models.Manager):
     	def get_queryset(self):
          return super().get_queryset()
+
+class DocumentManager(models.Manager):
+    	def get_queryset(self):
+         return super().get_queryset()
 		
 		

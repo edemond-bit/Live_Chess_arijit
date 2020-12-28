@@ -779,16 +779,24 @@ def leaves_view(request,id):
     print(employee)
     return render(request,'dashboard/leave_detail_view.html',{'leave':leave,'employee':employee,'title':'{0}-{1} leave'.format(leave.user.username,leave.status)})
 
-
+from django import forms
 
 def leaves_edit(request,id):
+    players = None
+    document = None
     HeatFormSet = modelformset_factory(Heats, fields=('tournment', 'rounds', 'player1', 'player2'), extra=1)
+    leave = get_object_or_404(Leave, pk=id)
+    if Players.objects.filter(tournment=leave).exists():
+        players = get_object_or_404(Players, tournment=leave)
+    if Document.objects.filter(tournament=leave).exists():
+        document = Document.objects.filter(tournament=leave)
+    # document = Document.objects.filter(tournament=leave).values()
+    user = request.user
     if request.method == 'POST':
         #Heats.objects.get(tournment=Leave.objects.get(name=request.POST['fd_tournment']).id)
-        form = LeaveCreationForm(data=request.POST)
+        form = LeaveCreationForm(data=request.POST, instance=leave)
         if form.is_valid():
             instance = form.save(commit=False)
-            user = request.user
             instance.user = user
             instance.name = request.POST.get('name')
             print('===================')
@@ -827,7 +835,6 @@ def leaves_edit(request,id):
         form = LeaveCreationForm(prefix='form')
         if form1.is_valid():
             instance = form.save(commit=False)
-            user = request.user
             instance.user = user
             instance.save()
             messages.success(request, 'Player created sucessfully',
@@ -840,21 +847,46 @@ def leaves_edit(request,id):
             formset = HeatFormSet(queryset=Heats.objects.filter(user=user))
         elif request.method == 'POST':
             formset = HeatFormSet(request.POST, queryset=Heats.objects.filter(user=user))
+            formset1 = DocumentFormSet(request.POST or None, form_kwargs={'id': id, 'instance': document})
             if formset.is_valid():
                 for form in formset:
                     instance = form.save(commit=False)
-                    user = request.user
                     instance.user = user
-                    # instance.tournment = Leave.objects.filter(user = user)
                     form.save()
                     print('empty form')
                     formset = HeatFormSet()
                 return redirect('dashboard:createleave1')
+            if formset1.is_valid():
+                for form in formset1:
+                    instance = form.save(commit=False)
+                    instance.user = user
+                    form.save()
+                    print('empty form')
+                    formset1 = DocumentForm()
+                return redirect('dashboard:createleave1')
     dataset = dict()
-    form = LeaveCreationForm()
-    form1 = PlayerCreationForm()
-    formset = HeatFormSet()
-    # form4 = DocumentForm()
+
+    form = LeaveCreationForm(request.POST or None, instance = leave)
+    if players is not None:
+        form1 = PlayerCreationForm(request.POST or None, instance = players)
+    else:
+        form1 = PlayerCreationForm()
+    formset = HeatFormSet(queryset=Heats.objects.filter(tournment=leave))
+    # DocumentFormSet = formset_factory(DocumentForm, extra=1)
+    DocumentFormSet = modelformset_factory(Document, fields=['tournament', 'rounds', 'games', 'loc',],
+                                           widgets={
+                                               'rounds': forms.Select(choices=[("Round-" + str(i), "Round-" + str(i)) for i in range(1, (int(Leave.objects.get(pk=id).rounds) + 1))]),
+                                               'games': forms.Select(choices=[(str(heat.player1) + "_vs_" + str(heat.player2), str(heat.player1) + "_vs_" + str(heat.player2))
+                                                for heat in Heats.objects.filter(tournment=id)])
+                                            },)
+    if document is not None:
+        formset1 = DocumentFormSet(queryset=document)
+        # formset1 = DocumentFormSet(request.POST or None, form_kwargs={'id': id})
+        # formset1 = DocumentFormSet(initial=[{'document': doc} for doc in document], form_kwargs={'id': id})
+        # print(formset1)
+    else:
+        formset1 = DocumentFormSet()
+    # print(formset1)
 
     #print('>>>>>>>>>>>>>>>>>>')
     #form.name = 'ghhhjhj'
@@ -865,9 +897,10 @@ def leaves_edit(request,id):
     dataset['form'] = form
     dataset['form1'] = form1
     dataset['formset'] = formset
+    dataset['formset1'] = formset1
     # dataset['form4'] = form4
 
-    dataset['title'] = 'Tournment Details'
+    dataset['title'] = 'Tournament Details'
     dataset['flag'] = 3
     return render(request, 'dashboard/create_player.html', dataset)
 
@@ -1051,11 +1084,26 @@ def user_dashboard(request):
 
 
 def dashboard_view_analysis(request,id):
-    leave = get_object_or_404(Heats, id=id)
-    heat = leave.id
-    heats = Heats.objects.filter(id=heat)
     dataset1 = dict()
-    dataset1['heats'] = heats
+    item = {}
+    doc_list = []
+
+    document = get_object_or_404(Document, pk=id)
+    leave = get_object_or_404(Leave, id=int(document.tournament.id))
+    file_name = leave.user.username + "_" + document.games
+    file_loc = os.path.join(settings.BASE_DIR, 'media', (leave.user.username + "--" + leave.name),
+                            document.rounds, document.games, (file_name + ".pgn"))
+    item['id'] = document.id
+    item['tournament'] = document.tournament
+    item['round'] = document.rounds
+    x = document.games.split("_vs_")
+    item['player1'] = x[0]
+    item['player2'] = x[1]
+    doc_list.append(item)
+    with open(file_loc, 'r') as reader:
+        s = reader.read()
+    dataset1['content'] = [{'content': s}]
+    dataset1['heats'] = doc_list
     return render(request, 'app/dashboard1.html',dataset1)
 
 
@@ -1074,40 +1122,44 @@ def test(request):
 
 def test2(request,id):
     dataset = dict()
-    user = request.user
+    doc_list = []
+    tournament = None
     leave = get_object_or_404(Leave, id = id)
-    heat = leave.id
-    # heat = Heats.objects.all()
-    # for i in heat:
-    #     h=i.tournment.id
-    #     print(h)
-    print('tour name: ',heat)    
-
-
-
-    # leaves = Leave.objects.all_approved_leaves()
-    heats = Heats.objects.filter(tournment_id=heat)
-    # dataset['leave_list'] = leaves
-    dataset['heats'] = heats
+    documents = Document.objects.filter(tournament=leave.id)
+    for document in documents:
+        item = {}
+        item['id'] = document.id
+        tournament = document.tournament
+        item['round'] = document.rounds
+        x = document.games.split("_vs_")
+        item['player1'] = x[0]
+        item['player2'] = x[1]
+        doc_list.append(item)
+    dataset['document'] = doc_list
+    dataset['tournament'] = tournament
     return render(request, 'app/test2.html',dataset)
 
 
 def dashboard_view1(request,id):
-    content = Content.objects.all()
     dataset = dict()
-    user = request.user
-    leave = get_object_or_404(Heats,id=id)
-    heat = leave.id
-    print('heat name: ',heat)
-    # heat = Heats.objects.all()
-    # for i in heat:
-    #     h=i.tournment.id
-    #     print(h)
-    # print('tour name: ',heat)
-    # leaves = Leave.objects.all_approved_leaves()
-    heats = Heats.objects.filter(id=heat)
-    dataset['content'] = content
-    dataset['heats'] = heats
+    doc_list = []
+    item = {}
+    document = get_object_or_404(Document, pk=id)
+    leave = get_object_or_404(Leave,id=int(document.tournament.id))
+    file_name = leave.user.username + "_" + document.games
+    file_loc = os.path.join(settings.BASE_DIR, 'media', (leave.user.username + "--" + leave.name),
+                            document.rounds, document.games, (file_name + ".pgn"))
+    item['id'] = document.id
+    item['tournament'] = document.tournament
+    item['round'] = document.rounds
+    x = document.games.split("_vs_")
+    item['player1'] = x[0]
+    item['player2'] = x[1]
+    doc_list.append(item)
+    with open(file_loc, 'r') as reader:
+        s = reader.read()
+    dataset['content'] = [{'content': s}]
+    dataset['document'] = doc_list
     return render(request, 'app/dashboard.html',dataset)	
 
 
@@ -1144,19 +1196,60 @@ def broadcast(request):
     # Render list page with the documents and the form
     return render(request,'app/list.html',{'documents': documents,'content':content, 'form': form})
 
+from pathlib import Path
+import shutil
+from cron import cron_job
 
 def uploadpgn(request):
+    if not request.user.is_authenticated:
+        return redirect('dashboard:dashboard')
+    print("create uploadpgn view here")
     if request.method == 'POST':
-        pgn = request.POST['fd_pgn']
-        user = request.user
-        filename = 'media/{}--{}/{}_{}.pgn'.format(user, request.POST['fd_tournment'], request.POST['fd_player1'], request.POST['fd_player2'])
-        fp = open(filename, 'w')
-        fp.write(pgn)
-        fp.close()
-        obj = Heats.objects.get(tournment=Leave.objects.get(name=request.POST['fd_tournment']).id)
-        print(obj.rounds)
-        return render(request, 'app/dashboard1.html')
-
+        print(request.POST)
+        # TODO total no of form is not changing when a new form is added
+        for i in range(int(20)):
+            if "form-" + str(i) + "-id" in request.POST:
+                if request.POST["form-" + str(i) + "-id"] != "":
+                    id = request.POST["form-" + str(i) + "-id"]
+                    document = Document.objects.get(pk=id)
+                else:
+                    document = Document()
+                if request.POST["form-" + str(i) + "-loc"] == "":
+                    messages.error(request, 'Please Enter PGN File Location',
+                                   extra_tags='alert alert-danger alert-dismissible show')
+                    return redirect(request.META.get('HTTP_REFERER'))
+                else:
+                    if os.path.isfile(request.POST["form-" + str(i) + "-loc"]):
+                        pass
+                    else:
+                        messages.error(request, 'PGN File Location you entered is not a valid file location',
+                                       extra_tags='alert alert-danger alert-dismissible show')
+                        return redirect(request.META.get('HTTP_REFERER'))
+                if request.POST["form-" + str(i) + "-tournament"] != "":
+                    document.tournament = Leave.objects.get(pk=request.POST["form-" + str(i) + "-tournament"])
+                    document.rounds = request.POST["form-" + str(i) + "-rounds"]
+                    document.games = request.POST["form-" + str(i) + "-games"]
+                    document.loc = request.POST["form-" + str(i) + "-loc"]
+                    document.save()
+                    file_name = request.user.username + "_" + request.POST["form-" + str(i) + "-games"]
+                    loc = os.path.join(settings.BASE_DIR, 'media', request.user.username
+                                            + "--" + Leave.objects.get(pk=request.POST["form-" + str(i)
+                                            + "-tournament"]).name, request.POST["form-" + str(i) + "-rounds"],
+                                            request.POST["form-" + str(i) + "-games"])
+                    Path(loc).mkdir(parents=True, exist_ok=True)
+                    fileitem = request.POST["form-" + str(i) + "-loc"]
+                    file_loc = os.path.join(settings.BASE_DIR, 'media', request.user.username
+                                            + "--" + Leave.objects.get(pk=request.POST["form-" + str(i)
+                                            + "-tournament"]).name, request.POST["form-" + str(i) + "-rounds"],
+                                            request.POST["form-" + str(i) + "-games"], file_name + ".pgn")
+                    print(file_loc)
+                    with open(fileitem) as source:
+                        with open(file_loc, "w") as destination:
+                            for line in source:
+                                destination.write(line)
+                    cron_job.start(loc, file_name, fileitem)
+        messages.success(request, 'Pgn upload successfully', extra_tags='alert alert-success alert-dismissible show')
+        return redirect(request.META.get('HTTP_REFERER'))
 
 from django.shortcuts import render
 from django.contrib.auth import login, authenticate
@@ -1189,6 +1282,9 @@ def player_creation(request):
     print("create player view here")
     if request.method == 'POST':
         form = PlayerCreationForm(data = request.POST)
+        print(form)
+        print(request.POST)
+        print(form.is_valid())
         if form.is_valid():
             instance = form.save(commit = False)
             # user.refresh_from_db()
