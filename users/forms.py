@@ -159,13 +159,13 @@ class SignUpForm(UserCreationForm):
             'password2': None,
         }
 
-	
-		
+class DateInput(forms.DateInput):
+    input_type = 'date'
+
 class DetailForm(forms.ModelForm):
     image = forms.ImageField(widget=forms.FileInput(attrs={'onchange':'previewImage(this);'}))
-    
-
 
     class Meta:
         model = Details
-        fields = ( 'first_name', 'last_name','age', 'bio',)			
+        fields = ('age', 'bio', 'gender', 'contact', 'dob', 'image',)
+        widgets = {'dob': DateInput()}

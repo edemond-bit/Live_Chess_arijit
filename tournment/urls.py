@@ -3,13 +3,12 @@ from rest_framework import routers
 from . import views
 
 router = routers.DefaultRouter()
-router.register(r'users', views.UserViewSet, basename='user')
-router.register(r'tournament', views.LeaveViewSet, basename='tournament')
+# router.register(r'users', views.UserViewSet, basename='user')
+# router.register(r'tournament', views.LeaveViewSet, basename='tournament')
 
 # Wire up our API using automatic URL routing.
 # Additionally, we include login URLs for the browsable API.
 urlpatterns = [
     path('api1/', include(router.urls)),
-    path('api-auth/', include('rest_framework.urls', namespace='rest_framework')),
-    # path('api/leaves/', views.leave_list, name="leave"),
+    path('get_all/', views.TournamentViewSet, name="tournament"),
 ]

@@ -176,7 +176,7 @@
 
 
                                             <div class="list-group" id="list-tab" role="tablist">
-                                                <a class="list-group-item list-group-item-action" id="list-home-list" data-toggle="list" href="" role="tab" aria-controls=""><span>Fullname</span> <span style="float:right;">{{ employee.get_full_name }}</span>
+                                                <a class="list-group-item list-group-item-action" id="list-home-list" data-toggle="list" href="" role="tab" aria-controls=""><span>Fullname</span> <span style="float:right;">{{ request.user.first_name }} {{ request.user.last_name }}</span>
                                 </a>
 
                                                 <a class="list-group-item list-group-item-action" id="list-profile-list" data-toggle="list" href="" role="tab" aria-controls=""><span>Firstname</span> <span style="float:right;"> {{ request.user.first_name}} </span>
@@ -187,7 +187,7 @@
                                                 <a class="list-group-item list-group-item-action" id="list-messages-list" data-toggle="list" href="" role="tab" aria-controls=""><span>Age</span> <span style="float:right;">{{ user_detail.age}} </span>
                                 </a>
 
-                                                <a class="list-group-item list-group-item-action" id="list-settings-list" data-toggle="list" href="" role="tab" aria-controls=""><span>Gender</span> <span style="float:right;"> {{ employee.sex }}
+                                                <a class="list-group-item list-group-item-action" id="list-settings-list" data-toggle="list" href="" role="tab" aria-controls=""><span>Gender</span> <span style="float:right;"> {{ user_detail.gender }}
                                                 </span>
                                 </a>
 
@@ -200,7 +200,7 @@
 
 
 
-                                                <a class="list-group-item list-group-item-action" id="list-settings-list" data-toggle="list" href="" role="tab" aria-controls=""><span>Contact</span> <span style="float:right;"> {{ employee.tel  }}</span></a>
+                                                <a class="list-group-item list-group-item-action" id="list-settings-list" data-toggle="list" href="" role="tab" aria-controls=""><span>Contact</span> <span style="float:right;"> {{ user_detail.contact  }}</span></a>
 
 
 
@@ -209,7 +209,7 @@
 
 
 
-                                                <a class="list-group-item list-group-item-action" id="list-settings-list" data-toggle="list" href="" role="tab" aria-controls=""><span>Date of Birth</span><span style="float:right;">{{ employee.birthday}}</span></a>
+                                                <a class="list-group-item list-group-item-action" id="list-settings-list" data-toggle="list" href="" role="tab" aria-controls=""><span>Date of Birth</span><span style="float:right;">{{ user_detail.dob}}</span></a>
 
 
 
@@ -222,14 +222,14 @@
 
 
                                                 <a class="list-group-item list-group-item-action" id="list-settings-list" data-toggle="list" href="" role="tab" aria-controls="">
-                                                        {% if employee.is_blocked %}
+                                                        {% if request.user.is_active %}
                                                         <span>Status</span>
-                                                            <span style="float:right;">Inactive</span>
-                                                       
+                                                            <span style="float:right;">Active</span>
+
                                                         {% else %}
                                                        <span>Status</span>
-                                                            <span style="float:right;"> active</span>
-                                                       
+                                                            <span style="float:right;">Inactive</span>
+
                                                         {% endif %}
                                                    </a>
 

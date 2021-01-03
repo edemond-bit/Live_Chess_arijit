@@ -1648,7 +1648,7 @@ stroke: #efb700;
                                 <textarea name="fd_pgn" id="fd_pgn" rows="6" cols="50">
                                 </textarea>
                                 {% for h in heats%}
-                                <input type="text" name="fd_tournment" id="fd_tournment" value="{{h.tournment}}">
+                                <input type="text" name="fd_tournment" id="fd_tournment" value="{{h.tournament}}">
                                 <!--<input type="text" name="fd_round" id="fd_round" value="{{h.round}}">-->
                                 <input type="text" name="fd_player1" id="fd_player1" value="{{h.player1}}">
                                 <input type="text" name="fd_player2" id="fd_player2" value="{{h.player2}}">
@@ -4606,10 +4606,11 @@ stroke: #efb700;
         goToMove(gameHistory.length - 1);
     });
 </script> -->
-{% for content in content %}
-<!-- <li><a href="{{ document.docfile.url }}">{{ document.docfile.name }}</a></li> -->
-<li><a>{{ content.content }}</a></li>
-{% endfor %}
+<div id="content" style="display: none;">
+    {% for content in content %}
+    <li><a>{{ content.content }}</a></li>
+    {% endfor %}
+</div>
 <script>
     function goToMove(ply) {
 

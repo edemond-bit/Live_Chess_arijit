@@ -267,7 +267,7 @@ class Employee(models.Model):
 
     # membership
     membership = models.ForeignKey('Membership', on_delete=models.CASCADE, null=True, blank=True)
-    purchase_date = models.DateTimeField(verbose_name=_('Purchase_Date'), auto_now_add=True)
+    purchase_date = models.DateTimeField(null=True, verbose_name=_('Purchase_Date'), auto_now_add=True)
 
     # app related
     is_blocked = models.BooleanField(_('Is Blocked'), help_text='button to toggle employee block and unblock',
@@ -327,11 +327,24 @@ class Membership(models.Model):
 
 
 class Details(models.Model):
+    MALE = 'male'
+    FEMALE = 'female'
+    OTHER = 'other'
+    NOT_KNOWN = 'Not Known'
+
+    GENDER = (
+        (MALE, 'Male'),
+        (FEMALE, 'Female'),
+        (OTHER, 'Other'),
+        (NOT_KNOWN, 'Not Known'),
+    )
+
     user = models.OneToOneField(User, on_delete=models.CASCADE)
-    first_name = models.CharField(max_length=100, blank=True)
-    last_name = models.CharField(max_length=100, blank=True)
     age = models.PositiveIntegerField(_('Age'), null=True, blank=True, default=0)
     bio = models.CharField(max_length=100, blank=True)
+    gender = models.CharField(max_length=9,default=MALE,choices=GENDER,blank=True)
+    contact = models.CharField(max_length=13, blank=True, verbose_name="Phone Number")
+    dob = models.DateField(null=True, blank=True, verbose_name="Date Of Birth")
     image = models.FileField(_('Profile Image'), upload_to='profiles', default='default.png', blank=True, null=True,
                              help_text='upload image size less than 2.0MB')
 

@@ -16,9 +16,9 @@ Including another URLconf
 from django.conf import settings
 from django.conf.urls.static import static
 from django.contrib import admin
-from django.urls import path,include
+from django.urls import path, include
+from django.conf.urls import url
 from . import views
-
 
 urlpatterns = [
     path('admin/', admin.site.urls),#change url in production --> rabotecsuits.com/_&_wysiwyg-suits_empty-link_url
@@ -27,10 +27,13 @@ urlpatterns = [
     path('dashboard/',include('dashboard.urls',namespace='dashboard')),
     path('gateway/',include('gateway.urls',namespace='gateway')),
     path('forgot_password/', include('django.contrib.auth.urls')),
+    path(r'api/login/', views.LoginView.as_view(), name='login'),
+    path('api/registration/', views.RegisterView.as_view(), name='registration'),
     path('tournament/', include('tournment.urls')),
+    path('users/', include('users.urls')),
+    path('dashboard/', views.DashboardViewSet),
+    path('file_transfer/', views.file_transfer),
 ]
-
-
 
 if settings.DEBUG:
     urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
