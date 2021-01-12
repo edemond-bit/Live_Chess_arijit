@@ -63,27 +63,28 @@ def signup_view(request):
 			messages.error(request, "Follow Password Rules", extra_tags='alert alert-warning alert-dismissible show')
 	return render(request, 'accounts/register.html', {'form': form,'profile': True})
 
+
 def signup_view1(request):
-    if not (request.user.is_authenticated and request.user.is_superuser and request.user.is_staff):
-        messages.error(request,'Sorry you are not allowed to broadcast, you have to first Sign In to apply for Broadcast',extra_tags = 'alert alert-warning alert-dismissible show' )
-        
-    		
-    form = SignUpForm(request.POST)
-    if form.is_valid():
-        user = form.save()
-        user.refresh_from_db()
-        user.employee.first_name = form.cleaned_data.get('first_name')
-        user.employee.last_name = form.cleaned_data.get('last_name')
-        user.employee.email = form.cleaned_data.get('email')
-        user.save()
-        username = form.cleaned_data.get('username')
-        password = form.cleaned_data.get('password1')
-        user = authenticate(username=username, password=password)
-        login(request, user)
-        return redirect('accounts:login')
-    else:
-        form = SignUpForm()
-    return render(request, 'accounts/register.html', {'form': form,'profile': True})
+	if not (request.user.is_authenticated and request.user.is_superuser and request.user.is_staff):
+		messages.error(request, 'Sorry you are not allowed to broadcast, you have to first Login to apply for Broadcast', extra_tags='alert alert-warning alert-dismissible show')
+		return redirect('accounts:login')
+
+	# form = SignUpForm(request.POST)
+	# if form.is_valid():
+	# 	user = form.save()
+	# 	user.refresh_from_db()
+	# 	user.employee.first_name = form.cleaned_data.get('first_name')
+	# 	user.employee.last_name = form.cleaned_data.get('last_name')
+	# 	user.employee.email = form.cleaned_data.get('email')
+	# 	user.save()
+	# 	username = form.cleaned_data.get('username')
+	# 	password = form.cleaned_data.get('password1')
+	# 	user = authenticate(username=username, password=password)
+	# 	login(request, user)
+	# 	return redirect('accounts:login')
+	# else:
+	# 	form = SignUpForm()
+	# return render(request, 'accounts/register.html', {'form': form,'profile': True})
 
 
 
@@ -123,43 +124,33 @@ def login_view(request):
 	return render(request,'accounts/login.html',dataset)
 
 
-
-
 def user_profile_view(request):
 	'''
 	user profile view -> staffs (No edit) only admin/HR can edit.
 	'''
+	if not request.user.is_authenticated:
+		return redirect('accounts:login')
+
 	user = request.user
-	if user.is_authenticated:
-		employee = Employee.objects.filter(user = user).first()
-		user_detail = Details.objects.filter(user = user).first()
-		emergency = Emergency.objects.filter(employee = employee).first()
-		relationship = Relationship.objects.filter(employee = employee).first()
-		bank = Bank.objects.filter(employee = employee).first()
-
-		dataset = dict()
-		dataset['user_detail'] = user_detail
-		dataset['employee'] = employee
-		dataset['emergency'] = emergency
-		dataset['family'] = relationship
-		dataset['bank'] = bank
-
-		return render(request,'dashboard/employee_detail.html',dataset)
-	return HttpResponse("Sorry , not authenticated for this,admin or whoever you are :)")
+	employee = Employee.objects.filter(user = user).first()
+	dataset = dict()
+	dataset['user_detail'] = Details.objects.filter(user = user).first()
+	dataset['employee'] = Employee.objects.filter(user = user).first()
+	dataset['emergency'] = Emergency.objects.filter(employee = employee).first()
+	dataset['family'] = Relationship.objects.filter(employee = employee).first()
+	dataset['bank'] = Bank.objects.filter(employee = employee).first()
+	return render(request,'dashboard/employee_detail.html',dataset)
 
 
 def change_membership(request):
+	if not request.user.is_authenticated:
+		return redirect('accounts:login')
+
 	user = request.user
-	if user.is_authenticated:
-		employee = Employee.objects.filter(user=user).first()
-		membership = Membership.objects.all()
-
-		dataset = dict()
-		dataset['employee'] = employee
-		dataset['membership'] = membership
-
-		return render(request, 'accounts/membership_table.html', dataset)
-	return HttpResponse("Sorry , not authenticated for this,admin or whoever you are :)")
+	dataset = dict()
+	dataset['employee'] = Employee.objects.filter(user=user).first()
+	dataset['membership'] = Membership.objects.all()
+	return render(request, 'accounts/membership_table.html', dataset)
 
 
 def buy_membership(request):

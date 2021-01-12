@@ -104,4 +104,3 @@ wget>=3.2
 Whoosh>=2.7.4
 zope.interface>=4.6.0
 django-timezone-field>=4.0
-django-rest-auth>=0.9.5

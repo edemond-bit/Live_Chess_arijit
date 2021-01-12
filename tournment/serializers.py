@@ -35,3 +35,9 @@ class DashboardSerializer(serializers.ModelSerializer):
     class Meta:
         model = Leave
         fields = ['id', 'name', 'desc']
+
+class HomeSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = Leave
+        fields = ['id', 'name', 'desc']

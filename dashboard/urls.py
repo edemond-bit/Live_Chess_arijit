@@ -26,8 +26,8 @@ urlpatterns = [
     path('bank/create/',views.dashboard_bank_create,name='bankaccountcreate'),
 
     #---work-on-edit-view------#
-    path('tournment/apply/',views.leave_creation1,name='createleave1'),
-    path('tournment/apply/',views.leave_creation,name='createleave'),
+    path('tournment/apply/', views.leave_creation1, name='createleave1'),
+    path('leave/create/', views.leave_creation, name='createleave'),
     path('tournment/pending/all/',views.leaves_list,name='leaveslist'),
     path('tournment/approved/all/',views.leaves_approved_list,name='approvedleaveslist'),
     path('tournment/cancel/all/',views.cancel_leaves_list,name='canceleaveslist'),
@@ -45,21 +45,20 @@ urlpatterns = [
     
     # BIRTHDAY ROUTE
     # path('birthdays/all/',views.create_book_normal,name='birthdays'),
-    path('book/',views.formset_view,name='book'),
     # path('book1/<int:id>',views.formset_view1,name='book1'),
     path('user/dashboard/', views.user_dashboard, name='dashboard1'),
     path('broadcast/game/<int:id>/', views.dashboard_view1, name='dashboard11'),
     path('broadcast/analysis/<int:id>/', views.dashboard_view_analysis, name='dashboard_view_analysis'),
-    path('test/', views.test, name='test'),
+    # path('test/', views.test, name='test'),
     path('test2/<int:id>/', views.test2, name='test2'),
     path('test4/',views. test4, name='test4'),
     
     # path('', views.signup, name='profile-signup'),
-    path('create-user/',views.signup_view,name='register'),
+    # path('create-user/',views.signup_view,name='register'),
 
     #-----player----#
     path('player/create/',views.player_creation,name='createplayer'),
-    path('heats/create/<int:id>',views.heats,name='heats'),
+    path('heats/create/',views.heats_creation,name='createheat'),
     path('broadcast/create/',views.broadcast,name='broadcast'),
 
     #----upload pgn----#

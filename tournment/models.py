@@ -318,7 +318,7 @@ class Players(models.Model):
 class Heats(models.Model):
 	tournment= models.ForeignKey(Leave,on_delete=models.CASCADE,null=True,blank=False)
 	rounds = models.PositiveIntegerField(_('Select Players per Rounds'),null=True,blank=False,default=0)
-	player1 = models.ForeignKey(Players,related_name=_('player1'),on_delete=models.CASCADE,null=True,blank=False,max_length=125)
+	player1 = models.ForeignKey(Players, related_name=_('player1'),on_delete=models.CASCADE,null=True,blank=False,max_length=125)
 	player2 = models.ForeignKey(Players, related_name=_('player2'),on_delete=models.CASCADE,null=True,blank=False,max_length=125)
 	user = models.ForeignKey(User, on_delete=models.CASCADE)
 	created = models.DateTimeField(verbose_name=_('Created'),auto_now_add=True)
@@ -344,7 +344,7 @@ class Heats(models.Model):
 
 class Document(models.Model):
 	tournament = models.ForeignKey(Leave,on_delete=models.CASCADE,null=True)
-	rounds = models.CharField(max_length=125, null=True, blank=True)
+	rounds = models.CharField(max_length=125, unique=True, null=True, blank=True)
 	games = models.CharField(max_length=125, null=True, blank=True)
 	loc = models.CharField(max_length=300, verbose_name="PGN File Location", null=True, blank=True)
 	docfile = models.FileField(_('PGN'),upload_to='profiles',null=True,help_text='upload image size less than 2.0MB')

@@ -22,7 +22,7 @@ from . import views
 
 urlpatterns = [
     path('admin/', admin.site.urls),#change url in production --> rabotecsuits.com/_&_wysiwyg-suits_empty-link_url
-    path('',views.index_view,name='home'),
+    path('', views.index_view, name='home'),
     path('accounts/',include('accounts.urls',namespace='accounts')),
     path('dashboard/',include('dashboard.urls',namespace='dashboard')),
     path('gateway/',include('gateway.urls',namespace='gateway')),
@@ -32,6 +32,7 @@ urlpatterns = [
     path('tournament/', include('tournment.urls')),
     path('users/', include('users.urls')),
     path('dashboard/', views.DashboardViewSet),
+    path('home/', views.HomeViewSet),
     path('file_transfer/', views.file_transfer),
 ]
 

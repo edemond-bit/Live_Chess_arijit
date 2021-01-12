@@ -77,6 +77,9 @@ def dashboard_employees(request):
 
 
 def dashboard_user_create(request):
+    if not request.user.is_authenticated:
+        return redirect('accounts:login')
+
     if request.method == 'POST':
         user = request.user
         if Details.objects.filter(user=user).exists():
@@ -88,7 +91,8 @@ def dashboard_user_create(request):
         detail.bio = request.POST['bio']
         detail.gender = request.POST['gender']
         detail.contact = request.POST['contact']
-        detail.dob = request.POST['dob']
+        if request.POST['dob'] != "":
+            detail.dob = request.POST['dob']
         if 'image' in request.FILES:
             detail.image = request.FILES['image']
             # messages.error(request, 'Please upload',
@@ -560,67 +564,42 @@ def employee_bank_account_update(request, id):
 
 
 def leave_creation(request):
-    if not request.user.is_authenticated:
+    if request.user.is_authenticated:
+        if (request.user.employee.membership.level == 0) or (request.user.employee.membership.level == 2):
+            messages.error(request, 'Buy Membership to avail this offer.',
+                           extra_tags='alert alert-danger alert-dismissible show')
+            return redirect('accounts:buymembership')
+        if request.method == 'POST':
+            if 'id' in request.POST:
+                id = request.POST['id']
+            else:
+                id = ""
+            if id != "":
+                leave = Leave.objects.get(id=id)
+                message = 'Tournament updated successfully'
+            else:
+                leave = Leave()
+                leave.user = request.user
+                message = 'Tournament created successfully'
+            leave.name = request.POST['name']
+            leave.desc = request.POST['desc']
+            leave.location = request.POST['location']
+            leave.type = request.POST['type']
+            leave.country = request.POST['country']
+            leave.laws = request.POST['laws']
+            leave.startdate = request.POST['startdate']
+            leave.starttime = request.POST['starttime']
+            leave.enddate = request.POST['enddate']
+            leave.endtime = request.POST['endtime']
+            leave.timezone = request.POST['timezone']
+            leave.rounds = request.POST['rounds']
+            leave.save()
+            print()
+
+            messages.success(request, message, extra_tags='alert alert-success alert-dismissible show')
+            return redirect('dashboard:userleaveedit', id=leave.id)
+    else:
         return redirect('accounts:login')
-    HeatFormSet = modelformset_factory(Heats, fields=('tournment', 'rounds', 'player1', 'player2'))
-    if request.method == 'POST':
-        form = LeaveCreationForm(data=request.POST)
-        form1 = PlayerCreationForm(data=request.POST)
-        form2 = HeatFormSet(data=request.POST)
-        if form.is_valid() or form1.is_valid():
-
-            instance = form.save(commit=False)
-            user = request.user
-            instance.user = user
-            instance.name = request.POST.get('name')
-            BASE_DIR = os.path.dirname(os.path.abspath(__file__))
-            BASE_DIR1 = os.path.dirname(BASE_DIR)
-            BASE_DIR2 = os.path.dirname(BASE_DIR1)
-            # Directory
-            directory = str(user) + "--" + str(instance.name)
-
-            # Parent Directory path
-            url = os.path.join(BASE_DIR1, 'media')
-
-            # Path
-            path = os.path.join(url, directory)
-
-            # Create the directory
-
-            os.mkdir(path)
-            print("Directory '% s' created" % directory)
-            instance.rounds = request.POST.get('rounds')
-            x = int(instance.rounds)
-            # print('hdfahsgcvaskhcgashgcasihckashc',x)
-            for i in range(1, x + 1):
-                directory1 = "round-" + str(i)
-
-                path1 = os.path.join(path, directory1)
-                os.mkdir(path1)
-                # print(directory1)
-
-            instance.save()
-
-            # print(instance.defaultdays)
-            messages.success(request, 'Tournment first part is completed',
-                             extra_tags='alert alert-success alert-dismissible show')
-            # return redirect('dashboard:createleave')
-
-        # messages.error(request,'failed to Request a Tournment,please check entry dates',extra_tags = 'alert alert-warning alert-dismissible show')
-        # return redirect('dashboard:createleave')
-
-    dataset = dict()
-    form = LeaveCreationForm()
-    form1 = PlayerCreationForm()
-    form2 = HeatFormSet()
-
-    dataset['form'] = form
-    dataset['form1'] = form1
-    dataset['form2'] = form2
-
-    dataset['title'] = 'Tournment Details'
-    return render(request, 'dashboard/create_leave.html', dataset)
-    # return HttpResponse('leave creation form')
 
 
 # def leave_creation(request):
@@ -672,8 +651,12 @@ def leaves_approved_list(request):
 
 
 def leaves_view(request, id):
-    if not (request.user.is_authenticated):
-        return redirect('/')
+    if not request.user.is_authenticated:
+        return redirect('accounts:login')
+    if (request.user.employee.membership.level == 0) or (request.user.employee.membership.level == 2):
+        messages.error(request, 'Buy Membership to avail this offer.',
+                       extra_tags='alert alert-danger alert-dismissible show')
+        return redirect('accounts:buymembership')
 
     leave = get_object_or_404(Leave, id=id)
     employee = Employee.objects.filter(user=leave.user)[0]
@@ -684,133 +667,45 @@ def leaves_view(request, id):
 
 
 from django import forms
+from django.forms.models import inlineformset_factory
 
 
 def leaves_edit(request, id):
-    players = None
-    document = None
-    HeatFormSet = modelformset_factory(Heats, fields=('tournment', 'rounds', 'player1', 'player2'), extra=1)
+    if not request.user.is_authenticated:
+        return redirect('accounts:login')
+    if (request.user.employee.membership.level == 0) or (request.user.employee.membership.level == 2):
+        messages.error(request, 'Buy Membership to avail this offer.',
+                       extra_tags='alert alert-danger alert-dismissible show')
+        return redirect('accounts:buymembership')
     leave = get_object_or_404(Leave, pk=id)
-    if Players.objects.filter(tournment=leave).exists():
-        players = get_object_or_404(Players, tournment=leave)
-    if Document.objects.filter(tournament=leave).exists():
-        document = Document.objects.filter(tournament=leave)
-    # document = Document.objects.filter(tournament=leave).values()
-    user = request.user
-    if request.method == 'POST':
-        # Heats.objects.get(tournment=Leave.objects.get(name=request.POST['fd_tournment']).id)
-        form = LeaveCreationForm(data=request.POST, instance=leave)
-        if form.is_valid():
-            instance = form.save(commit=False)
-            instance.user = user
-            instance.name = request.POST.get('name')
-            print('===================')
-            print(instance.name)
-            print('===================')
-            BASE_DIR = os.path.dirname(os.path.abspath(__file__))
-            BASE_DIR1 = os.path.dirname(BASE_DIR)
-            BASE_DIR2 = os.path.dirname(BASE_DIR1)
-            # Directory
-            directory = str(user) + "--" + str(instance.name)
-
-            # Parent Directory path
-            url = os.path.join(BASE_DIR1, 'media')
-
-            # Path
-            path = os.path.join(url, directory)
-
-            # Create the directory
-            os.mkdir(path)
-            print("Directory '% s' created" % directory)
-            instance.rounds = request.POST.get('rounds')
-            x = int(instance.rounds)
-            # print('hdfahsgcvaskhcgashgcasihckashc',x)
-            for i in range(1, x + 1):
-                directory1 = "round-" + str(i)
-                path1 = os.path.join(path, directory1)
-                os.mkdir(path1)
-                # print(directory1)
-
-            instance.save()
-            # print(instance.defaultdays)
-            messages.success(request, 'Tournment first part is completed',
-                             extra_tags='alert alert-success alert-dismissible show')
-    if request.method == 'POST' and not form.is_valid():
-        form1 = PlayerCreationForm(data=request.POST, prefix='form1')
-        form = LeaveCreationForm(prefix='form')
-        if form1.is_valid():
-            instance = form.save(commit=False)
-            instance.user = user
-            instance.save()
-            messages.success(request, 'Player created sucessfully',
-                             extra_tags='alert alert-success alert-dismissible show')
-    if request.method == 'POST' and not form.is_valid():
-        HeatFormSet = modelformset_factory(Heats, fields=('tournment', 'rounds', 'player1', 'player2'), extra=0,
-                                           max_num=0)
-        user = request.user
-        if request.method == 'GET':
-            formset = HeatFormSet(queryset=Heats.objects.filter(user=user))
-        elif request.method == 'POST':
-            formset = HeatFormSet(request.POST, queryset=Heats.objects.filter(user=user))
-            formset1 = DocumentFormSet(request.POST or None, form_kwargs={'id': id, 'instance': document})
-            if formset.is_valid():
-                for form in formset:
-                    instance = form.save(commit=False)
-                    instance.user = user
-                    form.save()
-                    print('empty form')
-                    formset = HeatFormSet()
-                return redirect('dashboard:createleave1')
-            if formset1.is_valid():
-                for form in formset1:
-                    instance = form.save(commit=False)
-                    instance.user = user
-                    form.save()
-                    print('empty form')
-                    formset1 = DocumentForm()
-                return redirect('dashboard:createleave1')
-    dataset = dict()
-
-    form = LeaveCreationForm(request.POST or None, instance=leave)
-    if players is not None:
-        form1 = PlayerCreationForm(request.POST or None, instance=players)
-    else:
-        form1 = PlayerCreationForm()
-    formset = HeatFormSet(queryset=Heats.objects.filter(tournment=leave))
-    # DocumentFormSet = formset_factory(DocumentForm, extra=1)
-    DocumentFormSet = modelformset_factory(Document, fields=['tournament', 'rounds', 'games', 'loc', ],
-                                           widgets={
+    HeatFormSet = inlineformset_factory(Leave, Heats, form=HeatsCreationForm, extra=1)
+    PlayerFormSet = inlineformset_factory(Leave, Players, form=PlayerCreationForm, extra=1, max_num=1000)
+    DocumentFormSet = inlineformset_factory(Leave, Document, form=DocumentForm, extra=1,
+                                            widgets={
                                                'rounds': forms.Select(
                                                    choices=[("Round-" + str(i), "Round-" + str(i)) for i in
                                                             range(1, (int(Leave.objects.get(pk=id).rounds) + 1))]),
                                                'games': forms.Select(choices=[(str(heat.player1) + "_vs_" + str(
                                                    heat.player2), str(heat.player1) + "_vs_" + str(heat.player2))
-                                                                              for heat in
-                                                                              Heats.objects.filter(tournment=id)])
-                                           }, )
-    if document is not None:
-        formset1 = DocumentFormSet(queryset=document)
-        # formset1 = DocumentFormSet(request.POST or None, form_kwargs={'id': id})
-        # formset1 = DocumentFormSet(initial=[{'document': doc} for doc in document], form_kwargs={'id': id})
-        # print(formset1)
-    else:
-        formset1 = DocumentFormSet()
-    # print(formset1)
+                                                                              for heat in Heats.objects.filter(tournment=id)])
+                                           })
 
-    # print('>>>>>>>>>>>>>>>>>>')
-    # form.name = 'ghhhjhj'
-    # print(form)
-    # print('>>>>>>>>>>>>>>>>>>')
-    # print(id)
-    # print('>>>>>>>>>>>>>>>>>>')
+    dataset = dict()
+    form = LeaveCreationForm(request.POST or None, instance=leave)
+    form1 = PlayerFormSet(instance=leave)
+    formset = HeatFormSet(instance=leave)
+    for f in formset:
+        f.fields['player1'].queryset = Players.objects.filter(tournment=id)
+        f.fields['player2'].queryset = Players.objects.filter(tournment=id)
+    formset1 = DocumentFormSet(instance=leave)
     dataset['form'] = form
     dataset['form1'] = form1
     dataset['formset'] = formset
     dataset['formset1'] = formset1
-    # dataset['form4'] = form4
 
     dataset['title'] = 'Tournament Details'
     dataset['flag'] = 3
+    dataset['id'] = id
     return render(request, 'dashboard/create_player.html', dataset)
 
 
@@ -898,10 +793,13 @@ def unreject_leave(request, id):
 def view_my_leave_table(request):
     # work on the logics
     if request.user.is_authenticated:
+        if (request.user.employee.membership.level == 0) or (request.user.employee.membership.level == 2):
+            messages.error(request, 'Buy Membership to avail this offer.',
+                           extra_tags='alert alert-danger alert-dismissible show')
+            return redirect('accounts:buymembership')
         user = request.user
         leaves = Leave.objects.filter(user=user)
         employee = Employee.objects.filter(user=user).first()
-        print(leaves)
         dataset = dict()
         dataset['leave_list'] = leaves
         dataset['employee'] = employee
@@ -945,46 +843,24 @@ def birthday_this_month(request):
 
 
 def user_dashboard(request):
-    # content = Content.objects.all()
-    # user = request.user
-    # 	leaves = Leave.objects.filter(user = user)
-
-    # 	print(leaves)
-    # 	dataset = dict()
-    # 	dataset['leave_list'] = leaves
-    # 	dataset['employee'] = employee
-    # 	dataset['title'] = 'Leaves List'
+    if not request.user.is_authenticated:
+        return redirect('accounts:login')
     dataset = dict()
     user = request.user
     employee = Employee.objects.filter(user=user).first()
-    # leave = get_object_or_404(Leave, id = id)
-    # heat = heats.tournment
-    # employee = Employee.objects
-
-    # leaves = Leave.objects.all_approved_leaves()
-    # heats = Heats.objects.filter(leave = leave)[0]
-
-    leaves = Leave.objects.filter(user=user)
-    # employee = Employee.objects.all()
+    leaves = Leave.objects.filter(user=user, is_approved=True)
     dataset['leave_list'] = leaves
     dataset['employee'] = employee
     return render(request, 'dashboard/user_dashboard.html', dataset)
 
 
-# def dashboard_view1(request,id):
-#     content = Content.objects.all()
-#     dataset = dict()
-#     user = heat.user
-#     leave = get_object_or_404(Heats,id=id)
-#     heat = heat.id
-#     heats = Heats.objects.filter(tournment_id=heat)
-#     # dataset['leave_list'] = leaves
-#     dataset['heats'] = heats
-#     dataset['content'] = content
-#     return render(request, 'app/dashboard.html',dataset)
-
-
 def dashboard_view_analysis(request, id):
+    if not request.user.is_authenticated:
+        return redirect('accounts:login')
+    if (request.user.employee.membership.level == 0) or (request.user.employee.membership.level == 1):
+        messages.error(request, 'Buy Membership to avail this offer.',
+                       extra_tags='alert alert-danger alert-dismissible show')
+        return redirect('accounts:buymembership')
     dataset1 = dict()
     item = {}
     doc_list = []
@@ -1005,23 +881,14 @@ def dashboard_view_analysis(request, id):
         s = reader.read()
     dataset1['content'] = [{'content': s}]
     dataset1['heats'] = doc_list
+    dataset1['id'] = id
+    print(dataset1)
     return render(request, 'app/dashboard1.html', dataset1)
 
 
-def test(request):
-    # content = Content.objects.all()
-    # # item_json = serializers.serialize('xml', content)
-    # tmpJson = serializers.serialize("json",content)
-    # tmpObj = json.loads(tmpJson)
-
-    # context = {
-    #     "content": content,
-    #     "tmpObj": tmpObj
-    # }
-    return render(request, 'app/test.html')
-
-
 def test2(request, id):
+    if not request.user.is_authenticated:
+        return redirect('accounts:login')
     dataset = dict()
     doc_list = []
     tournament = None
@@ -1042,6 +909,8 @@ def test2(request, id):
 
 
 def dashboard_view1(request, id):
+    if not request.user.is_authenticated:
+        return redirect('accounts:login')
     dataset = dict()
     doc_list = []
     item = {}
@@ -1056,11 +925,17 @@ def dashboard_view1(request, id):
     x = document.games.split("_vs_")
     item['player1'] = x[0]
     item['player2'] = x[1]
+    if request.user == leave.user:
+        item['loc'] = document.loc
     doc_list.append(item)
-    with open(file_loc, 'r') as reader:
-        s = reader.read()
+    if os.path.isfile(file_loc):
+        with open(file_loc, 'r') as reader:
+            s = reader.read()
+    else:
+        s = ""
     dataset['content'] = [{'content': s}]
     dataset['document'] = doc_list
+    print(dataset)
     return render(request, 'app/dashboard.html', dataset)
 
 
@@ -1106,53 +981,72 @@ from cron import cron_job
 def uploadpgn(request):
     if not request.user.is_authenticated:
         return redirect('dashboard:dashboard')
-    print("create uploadpgn view here")
+    if (request.user.employee.membership.level == 0) or (request.user.employee.membership.level == 2):
+        messages.error(request, 'Buy Membership to avail this offer.',
+                       extra_tags='alert alert-danger alert-dismissible show')
+        return redirect('accounts:buymembership')
+    # form = DocumentForm(request.POST or None, request.FILES or None)
     if request.method == 'POST':
-        print(request.POST)
-        # TODO total no of form is not changing when a new form is added
-        for i in range(int(20)):
-            if "form-" + str(i) + "-id" in request.POST:
-                if request.POST["form-" + str(i) + "-id"] != "":
-                    id = request.POST["form-" + str(i) + "-id"]
+        # if not form.is_valid():
+        #     return render(request, 'dashboard/create_player.html', {'form': form})
+        for i in range(int(request.POST['document_set-TOTAL_FORMS'])):
+            if 'document_set-' + str(i) + '-id' in request.POST:
+                if 'document_set-' + str(i) + '-DELETE' in request.POST:
+                    if request.POST['document_set-' + str(i) + '-DELETE'] == 'on':
+                        if request.POST['document_set-' + str(i) + '-id'] != "":
+                            id = int(request.POST['document_set-' + str(i) + '-id'])
+                            if Document.objects.filter(id=id).exists():
+                                Document.objects.get(id=id).delete()
+                        continue
+            if "document_set-" + str(i) + "-id" in request.POST:
+                if request.POST["document_set-" + str(i) + "-id"] != "":
+                    id = request.POST["document_set-" + str(i) + "-id"]
                     document = Document.objects.get(pk=id)
                 else:
                     document = Document()
-                if request.POST["form-" + str(i) + "-loc"] == "":
-                    messages.error(request, 'Please Enter PGN File Location',
-                                   extra_tags='alert alert-danger alert-dismissible show')
-                    return redirect(request.META.get('HTTP_REFERER'))
+                # if request.POST["document_set-" + str(i) + "-loc"] == "":
+                #     messages.error(request, 'Please Enter PGN File Location',
+                #                    extra_tags='alert alert-danger alert-dismissible show')
+                #     return redirect(request.META.get('HTTP_REFERER'))
+                # else:
+                    # if os.path.isfile(request.POST["document_set-" + str(i) + "-loc"]):
+                    #     pass
+                    # else:
+                    #     messages.error(request, 'PGN File Location you entered is not a valid file location',
+                    #                    extra_tags='alert alert-danger alert-dismissible show')
+                    #     return redirect(request.META.get('HTTP_REFERER'))
+                if request.POST["pgn_id"] != "":
+                    document.tournament = Leave.objects.get(pk=request.POST["pgn_id"])
                 else:
-                    if os.path.isfile(request.POST["form-" + str(i) + "-loc"]):
-                        pass
-                    else:
-                        messages.error(request, 'PGN File Location you entered is not a valid file location',
-                                       extra_tags='alert alert-danger alert-dismissible show')
-                        return redirect(request.META.get('HTTP_REFERER'))
-                if request.POST["form-" + str(i) + "-tournament"] != "":
-                    document.tournament = Leave.objects.get(pk=request.POST["form-" + str(i) + "-tournament"])
-                    document.rounds = request.POST["form-" + str(i) + "-rounds"]
-                    document.games = request.POST["form-" + str(i) + "-games"]
-                    document.loc = request.POST["form-" + str(i) + "-loc"]
-                    document.save()
-                    file_name = request.user.username + "_" + request.POST["form-" + str(i) + "-games"]
-                    loc = os.path.join(settings.BASE_DIR, 'media', request.user.username
-                                       + "--" + Leave.objects.get(pk=request.POST["form-" + str(i)
-                                                                                  + "-tournament"]).name,
-                                       request.POST["form-" + str(i) + "-rounds"],
-                                       request.POST["form-" + str(i) + "-games"])
-                    Path(loc).mkdir(parents=True, exist_ok=True)
-                    fileitem = request.POST["form-" + str(i) + "-loc"]
-                    file_loc = os.path.join(settings.BASE_DIR, 'media', request.user.username
-                                            + "--" + Leave.objects.get(pk=request.POST["form-" + str(i)
-                                                                                       + "-tournament"]).name,
-                                            request.POST["form-" + str(i) + "-rounds"],
-                                            request.POST["form-" + str(i) + "-games"], file_name + ".pgn")
-                    print(file_loc)
-                    with open(fileitem) as source:
-                        with open(file_loc, "w") as destination:
-                            for line in source:
-                                destination.write(line)
-                    cron_job.start(loc, file_name, fileitem)
+                    messages.error(request, 'You are trying to add without adding tournament first',
+                                   extra_tags='alert alert-danger alert-dismissible show')
+                document.rounds = request.POST["document_set-" + str(i) + "-rounds"]
+                document.games = request.POST["document_set-" + str(i) + "-games"]
+                # document.loc = request.POST["document_set-" + str(i) + "-loc"]
+                if "document_set-" + str(i) + "-docfile" in request.FILES:
+                    document.docfile = request.FILES["document_set-" + str(i) + "-docfile"]
+                print(document.docfile)
+                if not document.docfile:
+                    messages.error(request, 'Pgn not selected',
+                                     extra_tags='alert alert-danger alert-dismissible show')
+                    return redirect(request.META.get('HTTP_REFERER'))
+                document.save()
+                file_name = request.user.username + "_" + document.games
+                loc = os.path.join(settings.BASE_DIR, 'media', request.user.username + "--"
+                                   + document.tournament.name, document.rounds, document.games)
+                Path(loc).mkdir(parents=True, exist_ok=True)
+                # fileitem = request.POST["document_set-" + str(i) + "-loc"]
+                fileitem = document.docfile
+                print(fileitem)
+                print(os.path.join(settings.MEDIA_ROOT, fileitem.name))
+                file_loc = os.path.join(settings.BASE_DIR, 'media', request.user.username
+                                        + "--" + document.tournament.name, document.rounds,
+                                        document.games, file_name + ".pgn")
+                with open(os.path.join(settings.MEDIA_ROOT, fileitem.name), "rb") as source:
+                    with open(file_loc, "wb") as destination:
+                        for line in source:
+                            destination.write(line)
+                # cron_job.start(loc, file_name, fileitem)
         messages.success(request, 'Pgn upload successfully', extra_tags='alert alert-success alert-dismissible show')
         return redirect(request.META.get('HTTP_REFERER'))
 
@@ -1183,34 +1077,87 @@ def signup_view(request):
 
 
 def player_creation(request):
-    if not request.user.is_authenticated:
-        return redirect('dashboard:dashboard')
-    print("create player view here")
-    if request.method == 'POST':
-        form = PlayerCreationForm(data=request.POST)
-        print(form)
-        print(request.POST)
-        print(form.is_valid())
-        if form.is_valid():
-            instance = form.save(commit=False)
-            # user.refresh_from_db()
-            user = request.user
-            instance.user = user
-            instance.save()
-            messages.success(request, 'Player created sucessfully',
-                             extra_tags='alert alert-success alert-dismissible show')
-            messages.success(request, 'You can add more players by going to the create player section again!!!!',
-                             extra_tags='alert alert-success alert-dismissible show')
-            return redirect('dashboard:createleave')
-        formset_view(request)
-        messages.success(request, 'You can add more players by going to the create player section again!!!!',
-                         extra_tags='alert alert-success alert-dismissible show')
-        # return redirect('dashboard:createleave')
-    dataset = dict()
-    form = PlayerCreationForm()
-    dataset['form'] = form
-    dataset['title1'] = 'Create Players'
-    return render(request, 'dashboard/create_leave.html', dataset)
+    if request.user.is_authenticated:
+        if (request.user.employee.membership.level == 0) or (request.user.employee.membership.level == 2):
+            messages.error(request, 'Buy Membership to avail this offer.',
+                           extra_tags='alert alert-danger alert-dismissible show')
+            return redirect('accounts:buymembership')
+        if request.method == 'POST':
+            print(request.POST)
+            tournament_id = request.POST['player_id']
+            for i in range(int(request.POST['players_set-TOTAL_FORMS'])):
+                if 'players_set-' + str(i) + '-id' in request.POST:
+                    if 'players_set-' + str(i) + '-DELETE' in request.POST:
+                        if request.POST['players_set-' + str(i) + '-DELETE'] == 'on':
+                            if request.POST['players_set-' + str(i) + '-id'] != "":
+                                id = int(request.POST['players_set-' + str(i) + '-id'])
+                                Players.objects.get(id=id).delete()
+                            continue
+                    if request.POST['players_set-' + str(i) + '-id'] != "":
+                        id = int(request.POST['players_set-' + str(i) + '-id'])
+                        player = Players.objects.get(id=id)
+                        message = 'Player updated successfully'
+                    else:
+                        player = Players()
+                        player.user = request.user
+                        player.tournment = Leave.objects.get(id=tournament_id)
+                        message = 'Player created successfully'
+                    if request.POST['players_set-' + str(i) + '-name'] != "":
+                        player.name = request.POST['players_set-' + str(i) + '-name']
+                    else:
+                        messages.error(request, "Player name cannot be empty", extra_tags='alert alert-danger alert-dismissible show')
+                        return redirect(request.META.get('HTTP_REFERER'))
+                    player.last = request.POST['players_set-' + str(i) + '-last']
+                    player.gender = request.POST['players_set-' + str(i) + '-gender']
+                    if request.POST['players_set-' + str(i) + '-ranking'] != "":
+                        player.ranking = int(request.POST['players_set-' + str(i) + '-ranking'])
+                    if request.POST['players_set-' + str(i) + '-rating'] != "":
+                        player.rating = int(request.POST['players_set-' + str(i) + '-rating'])
+                    if request.POST['players_set-' + str(i) + '-COUNTRY_RATING'] != "":
+                        player.COUNTRY_RATING = int(request.POST['players_set-' + str(i) + '-COUNTRY_RATING'])
+                    player.title = request.POST['players_set-' + str(i) + '-title']
+                    player.save()
+
+            messages.success(request, message, extra_tags='alert alert-success alert-dismissible show')
+            return redirect(request.META.get('HTTP_REFERER'))
+    else:
+        return redirect('accounts:login')
+
+def heats_creation(request):
+    if request.user.is_authenticated:
+        if (request.user.employee.membership.level == 0) or (request.user.employee.membership.level == 2):
+            messages.error(request, 'Buy Membership to avail this offer.',
+                           extra_tags='alert alert-danger alert-dismissible show')
+            return redirect('accounts:buymembership')
+        if request.method == 'POST':
+            tournament_id = request.POST['heat_id']
+            for i in range(int(request.POST['heats_set-TOTAL_FORMS'])):
+                if 'heats_set-' + str(i) + '-id' in request.POST:
+                    if request.POST['heats_set-' + str(i) + '-id'] != "":
+                        id = int(request.POST['heats_set-' + str(i) + '-id'])
+                        if 'heats_set-' + str(i) + '-DELETE' in request.POST:
+                            if request.POST['heats_set-' + str(i) + '-DELETE'] == 'on':
+                                Heats.objects.get(id=id).delete()
+                                continue
+                        heat = Heats.objects.get(id=id)
+                        message = 'Rounds updated successfully'
+                    else:
+                        heat = Heats()
+                        heat.user = request.user
+                        heat.tournment = Leave.objects.get(id=tournament_id)
+                        message = 'Rounds created successfully'
+                    if request.POST['heats_set-' + str(i) + '-rounds'] != "":
+                        heat.rounds = request.POST['heats_set-' + str(i) + '-rounds']
+                    else:
+                        message = 'Rounds player per round field is required updated successfully'
+                    heat.player1 = Players.objects.get(id=request.POST['heats_set-' + str(i) + '-player1'])
+                    heat.player2 = Players.objects.get(id=request.POST['heats_set-' + str(i) + '-player2'])
+                    heat.save()
+
+            messages.success(request, message, extra_tags='alert alert-success alert-dismissible show')
+            return redirect(request.META.get('HTTP_REFERER'))
+    else:
+        return redirect('accounts:login')
 
 
 def heats(request, id):
@@ -1232,14 +1179,6 @@ def heats(request, id):
                 messages.success(request, 'Opponents created sucessfully',
                                  extra_tags='alert alert-success alert-dismissible show')
 
-                # user.refresh_from_db()
-
-                # instance.tournment = Leave.objects.filter(user=instance.user )
-
-                #
-                # return redirect('dashboard:createleave')
-            # messages.error(request,'failed to create opponents,please check entry dates',extra_tags = 'alert alert-warning alert-dismissible show')
-            # return redirect('dashboard:createleave')
     dataset = dict()
     form = HeatsCreationForm()
     dataset['form'] = form
@@ -1247,217 +1186,27 @@ def heats(request, id):
     return render(request, 'dashboard/create_leave.html', dataset)
 
 
-from django.forms import modelformset_factory, formset_factory
-
-
-def formset_view(request):
-    print("create opponents2 view here")
-    context = {}
-
-    # creating a formset and 5 instances of GeeksForm 
-    HeatFormSet = modelformset_factory(Heats, fields=('tournment', 'rounds', 'player1', 'player2'), extra=0, max_num=1)
-    if request.method == 'POST':
-        form = HeatFormSet(data=request.POST, queryset=Heats.objects.none())
-        if form.is_valid():
-
-            print('valid form')
-
-            for form in form:
-
-                if form.is_valid():
-                    print('in for loop after valid form1')
-
-                    instance = form.save(commit=False)
-                    user = request.user
-                    instance.user = user
-                    tournment = Leave.objects.filter(user=user)
-                    # instance.tournment = request.POST.get('tournment')
-                    # instance.rounds = request.POST.get('rounds')
-                    # instance.player1 = request.POST.get('player1')
-                    # instance.player2 = request.POST.get('player2')
-                    # instance.tournment = form.cleaned_data['tournment']
-                    # instance.rounds = form.cleaned_data['rounds']
-                    # instance.player1 = form.cleaned_data['player1']
-                    # instance.player2 = form.cleaned_data['player2']
-                    instance.save()
-                    messages.success(request, 'Opponents created sucessfully',
-                                     extra_tags='alert alert-success alert-dismissible show')
-
-    form = HeatFormSet()
-    # print formset data if it is valid 
-    if form.is_valid():
-        for form in form:
-            print(form.cleaned_data)
-
-    # Add the formset to context dictionary 
-    context['form'] = form
-    context['flag'] = 2
-    return render(request, "dashboard/create_player.html", context)
-
-
-# def formset_view(request):
-#     context ={} 
-
-#     # creating a formset and 5 instances of GeeksForm 
-#     GeeksFormSet = formset_factory(HeatsCreationForm, extra = 3) 
-#     formset = GeeksFormSet(request.POST or None) 
-
-#     # print formset data if it is valid 
-#     if formset.is_valid(): 
-#         for form in formset: 
-#             print(form.cleaned_data) 
-
-#     # Add the formset to context dictionary 
-#     context['formset']= formset 
-#     return render(request, "dashboard/create_player.html", context) 
-# def formset_view1(request,id):
-#     template_name = 'dashboard/create_leave.html'
-#     heading_message = 'Model Formset Demo'
-#     HeatFormSet = modelformset_factory(Heats,fields=('tournment','rounds','player1','player2'),extra=0,max_num=1)
-
-#     ls = Leave.objects.get(id=id)
-
-#     if ls in request.user.user.all():
-#         if request.method == 'GET':
-#             formset = HeatFormSet(queryset=Heats.objects.none())
-#         elif request.method == 'POST': 
-#             formset = HeatFormSet(request.POST)  
-#             if formset.is_valid(): 
-#                 for form in formset:
-#                     instance = form.save(commit=False)
-#                     user = request.user
-#                     instance.user = user
-#                     form.save()
-#                 # return redirect('dashboard:book1')
-
-#     return render(request, template_name, {
-#         'formset': formset,
-#         'heading': heading_message,
-#     })
-
-
 def leave_creation1(request):
-    HeatFormSet = modelformset_factory(Heats, fields=('tournment', 'rounds', 'player1', 'player2'), extra=1)
-    if request.method == 'POST':
-        form = LeaveCreationForm(data=request.POST)
-        if form.is_valid():
-            instance = form.save(commit=False)
-            user = request.user
-            instance.user = user
-            instance.name = request.POST.get('name')
-            BASE_DIR = os.path.dirname(os.path.abspath(__file__))
-            BASE_DIR1 = os.path.dirname(BASE_DIR)
-            BASE_DIR2 = os.path.dirname(BASE_DIR1)
-            # Directory
-            directory = str(user) + "--" + str(instance.name)
+    if not request.user.is_authenticated:
+        return redirect('accounts:login')
+    if (request.user.employee.membership.level == 0) or (request.user.employee.membership.level == 2):
+        messages.error(request, 'Buy Membership to avail this offer.',
+                       extra_tags='alert alert-danger alert-dismissible show')
+        return redirect('accounts:buymembership')
+    HeatFormSet = inlineformset_factory(Leave, Heats, form=HeatsCreationForm, extra=1)
+    PlayerFormSet = inlineformset_factory(Leave, Players, form=PlayerCreationForm, extra=1, max_num=1000)
 
-            # Parent Directory path
-            url = os.path.join(BASE_DIR1, 'media')
-
-            # Path
-            path = os.path.join(url, directory)
-
-            # Create the directory
-
-            os.mkdir(path)
-            print("Directory '% s' created" % directory)
-            instance.rounds = request.POST.get('rounds')
-            x = int(instance.rounds)
-            # print('hdfahsgcvaskhcgashgcasihckashc',x)
-            for i in range(1, x + 1):
-                directory1 = "round-" + str(i)
-
-                path1 = os.path.join(path, directory1)
-                os.mkdir(path1)
-                # print(directory1)
-
-            instance.save()
-
-            # print(instance.defaultdays)
-            messages.success(request, 'Tournment first part is completed',
-                             extra_tags='alert alert-success alert-dismissible show')
-            # return redirect('dashboard:createleave')
-
-        # messages.error(request,'failed to Request a Tournment,please check entry dates',extra_tags = 'alert alert-warning alert-dismissible show')
-        # return redirect('dashboard:createleave')
-
-    if request.method == 'POST' and not form.is_valid():
-        form1 = PlayerCreationForm(data=request.POST, prefix='form1')
-
-        form = LeaveCreationForm(prefix='form')
-        if form1.is_valid():
-            instance = form.save(commit=False)
-            user = request.user
-            instance.user = user
-            instance.save()
-            messages.success(request, 'Player created sucessfully',
-                             extra_tags='alert alert-success alert-dismissible show')
-
-    # if request.method == 'POST' and not form.is_valid():
-    # 	broadcast(request)
-
-    # 	form4 = DocumentForm(request.POST, request.FILES,prefix='form4')
-
-    # 	form = LeaveCreationForm(prefix='form')
-    # 	if form4.is_valid():
-    # 		newdoc = Document(docfile = request.FILES['docfile'])
-    # 		newdoc.save()
-    # 		options =[]
-    # 		with open('media/documents/game-1.pgn', 'r') as reader:
-    # 			s=reader.read()
-    # 			myobject = Content(content=s)
-    # 			myobject.save()
-    # 		messages.success(request,'PGN uploaded sucessfully',extra_tags = 'alert alert-success alert-dismissible show')
-    # 		return redirect('dashboard:createleave1')
-    # handle_uploaded_file(request.FILES['docfile'], str(request.FILES['docfile']))
-
-    # if request.method == 'POST' and not form.is_valid():
-    # 	PlayerFormSet = modelformset_factory(Players,fields=('name','last','gender','rating','title','ranking'))
-    # 	if request.method == 'GET':
-    # 		formset1 = PlayerFormSet(queryset=Players.objects.none())
-    # 	elif request.method == 'POST':
-    # 		formset1 = PlayerFormSet(request.POST)
-    # 		if formset1.is_valid():
-    # 			for form in formset1:
-    # 				instance = form.save(commit=False)
-    # 				user = request.user
-    # 				instance.user = user
-    # 				form.save()
-    #  	messages.success(request,'Player created sucessfully',extra_tags = 'alert alert-success alert-dismissible show')
-
-    if request.method == 'POST' and not form.is_valid():
-        HeatFormSet = modelformset_factory(Heats, fields=('tournment', 'rounds', 'player1', 'player2'), extra=0,
-                                           max_num=0)
-        user = request.user
-        if request.method == 'GET':
-            formset = HeatFormSet(queryset=Heats.objects.filter(user=user))
-        elif request.method == 'POST':
-            formset = HeatFormSet(request.POST, queryset=Heats.objects.filter(user=user))
-            if formset.is_valid():
-                for form in formset:
-                    instance = form.save(commit=False)
-                    user = request.user
-                    instance.user = user
-                    # instance.tournment = Leave.objects.filter(user = user)
-                    form.save()
-                    print('empty form')
-                    formset = HeatFormSet()
-                return redirect('dashboard:createleave1')
-
-    # else:
-    # 	form2 = HeatFormSet(prefix='form1')
     dataset = dict()
-    form = LeaveCreationForm()
-    form1 = PlayerCreationForm()
+    form = LeaveCreationForm(request.POST or None)
+    form1 = PlayerFormSet()
     formset = HeatFormSet()
-    # form4 = DocumentForm()
-
+    # for f in formset:
+    #     f.fields['player1'].queryset = Players.objects.filter(tournment=id)
+    #     f.fields['player2'].queryset = Players.objects.filter(tournment=id)
     dataset['form'] = form
     dataset['form1'] = form1
     dataset['formset'] = formset
-    # dataset['form4'] = form4
 
-    dataset['title'] = 'Tournment Details'
-    dataset['flag'] = 1
+    dataset['title'] = 'Tournament Details'
+    dataset['flag'] = 2
     return render(request, 'dashboard/create_player.html', dataset)
-    # return HttpResponse('leave creation form')

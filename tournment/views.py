@@ -12,7 +12,7 @@ from django.views.decorators.csrf import csrf_exempt
 @permission_classes([IsAuthenticated])
 def TournamentViewSet(request):
     if request.method == 'GET':
-        leave = Leave.objects.all()
+        leave = Leave.objects.filter(user=request.user)
         serializer = LeaveSerializer(leave, many=True)
         return JsonResponse(serializer.data, safe=False)
 # class LeaveViewSet(viewsets.ModelViewSet):

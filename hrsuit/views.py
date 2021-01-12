@@ -24,15 +24,17 @@ from rest_framework.decorators import api_view, permission_classes
 from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
 
+
 def index_view(request):
+    if not request.user.is_authenticated:
+        return redirect('accounts:login')
     dataset = dict()
-    user = request.user
     leaves = Leave.objects.all_approved_leaves()
     employee = Employee.objects.all()
     dataset['leave_list'] = leaves
     dataset['employee'] = employee
 
-    return render(request,'_layout.html',dataset)
+    return render(request, '_layout.html', dataset)
 
 sensitive_post_parameters_m = method_decorator(
     sensitive_post_parameters(
@@ -171,17 +173,57 @@ class RegisterView(CreateAPIView):
 @permission_classes([IsAuthenticated])
 def DashboardViewSet(request):
     if request.method == 'GET':
-        leave = Leave.objects.filter(user=request.user)
+        leave = Leave.objects.filter(user=request.user, is_approved=True)
         serializer = DashboardSerializer(leave, many=True)
+        return JsonResponse(serializer.data, safe=False)
+
+@api_view(["GET"])
+@csrf_exempt
+@permission_classes([IsAuthenticated])
+def HomeViewSet(request):
+    if request.method == 'GET':
+        leave = Leave.objects.all_approved_leaves()
+        serializer = HomeSerializer(leave, many=True)
         return JsonResponse(serializer.data, safe=False)
 
 
 def file_transfer(request):
-    import shutil
-    import os
+    # import shutil
+    # import os
     # source_path = r"\\192.168.42.32\pn\move\move1.pgn"
     # print(os.listdir(r"\\192.168.225.36\\"))
-    source_path = r"\\192.168.225.36\moves\1\move2.pgn"
-    dest_path = r"E:\\"
-    shutil.copy(source_path, dest_path)
+    # source_path = r"\\192.168.225.36\moves\1\move2.pgn"
+    # dest_path = r"E:\\"
+    # shutil.copy(source_path, dest_path)
+    # import subprocess
+    # subprocess.run(["scp", "ubuntu@54.183.117.48:/home/ubuntu/Chess/media/documents/move7.pgn", "E:\\"])
+
+    import os
+    import paramiko
+    from io import StringIO
+    f = os.path.expanduser('~\Downloads\private_key1.ppk')
+    # with open(f, 'r') as file:
+    #     data = file.read().replace('\n', '')
+    # private_key = StringIO(data)
+    k = paramiko.RSAKey.from_private_key_file(f)
+    # file = paramiko.util.load_host_keys(os.path.expanduser('~\Downloads\Chess_Phythonn.ppk'))
+
+    host = '54.183.117.48'
+    # host = '192.168.42.32'
+    port = 22
+    username = 'ubuntu'
+
+    remote_path = r'/home/ubuntu/Chess/media/documents/move7.pgn'
+    # remote_path = r'/home/ubuntu/Chess/media/documents/move8.pgn'
+    local_path = r'E:\Live_Chess_arijit-main\media\server_data\abc.pgn'
+
+    ssh = paramiko.SSHClient()
+    ssh.set_missing_host_key_policy(paramiko.AutoAddPolicy())
+    ssh.connect(host, username=username, port=port, password="", key_filename=k)
+    sftp = ssh.open_sftp()
+    sftp.get(local_path, remote_path)
+
+    sftp.close()
+    ssh.close()
+
     return JsonResponse({"success": 1})
